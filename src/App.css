@@ -2395,7 +2395,7 @@ textarea {
   }
 
   .feedback-fab {
-    right: 1rem;
+    left: 1rem;
     bottom: 1rem;
     padding: 0.7rem 0.95rem;
     font-size: 0.95rem;
@@ -3529,7 +3529,9 @@ textarea {
 .feedback-fab {
   position: fixed;
   bottom: 24px;
-  right: 148px;
+  /* Sidebar-Breite (188px) + Abstand, damit der Button über dem Hauptbereich
+     schwebt statt über der Sidebar (dort liegen Datenschutz-Link/Legende). */
+  left: 240px;
   z-index: 950;
   display: flex;
   align-items: center;
@@ -3731,7 +3733,6 @@ textarea {
   }
 
   .feedback-fab {
-    right: 88px;
     padding: 0.75rem;
   }
 }
