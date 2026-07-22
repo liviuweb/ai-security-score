@@ -284,6 +284,7 @@ function App() {
           </div>
           <p className="sidebar-legend">A = sehr angemessen · E = unangemessen</p>
           <PrivacyNotice />
+          <p className="sidebar-credits">Eine Idee von Christian, Joash &amp; Livius</p>
         </div>
       </aside>
 

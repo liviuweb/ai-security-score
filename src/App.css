@@ -2458,6 +2458,15 @@ textarea {
   color: #e2e8f0;
 }
 
+.sidebar-credits {
+  margin: 0;
+  padding: 0 0.75rem;
+  font-size: 0.66rem;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.4;
+}
+
 .privacy-backdrop {
   position: fixed;
   inset: 0;
