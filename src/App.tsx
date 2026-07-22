@@ -108,6 +108,7 @@ interface TabProps {
 function App() {
   useTrackVisit()
   const [activeTab, setActiveTab] = useState<TabKey>('einfuehrung')
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [selectedScenarioId, setSelectedScenarioId] = useState(scenarios[0].id)
   const [selectedModel, setSelectedModel] = useState<ModelClass>('gross')
   const [demoStep, setDemoStep] = useState<number | null>(null)
@@ -189,30 +190,49 @@ function App() {
 
   return (
     <main className="app-shell">
-      <aside className="sidebar">
-        <div className="sidebar-brand">
-          <div className="brand-mark">KI</div>
-          <div>
-            <p className="brand-title">Nutri-Score</p>
-            <p className="brand-subtitle">Angemessenheit</p>
+      <aside className={`sidebar ${mobileNavOpen ? 'mobile-nav-open' : ''}`}>
+        <div className="sidebar-top">
+          <div className="sidebar-brand">
+            <div className="brand-mark">KI</div>
+            <div>
+              <p className="brand-title">Nutri-Score</p>
+              <p className="brand-subtitle">Angemessenheit</p>
+            </div>
           </div>
+
+          <button
+            type="button"
+            className="mobile-nav-toggle"
+            aria-label="Navigation öffnen"
+            aria-expanded={mobileNavOpen}
+            aria-controls="mobile-sidebar-nav"
+            onClick={() => setMobileNavOpen((open) => !open)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
 
-        <nav className="sidebar-nav" aria-label="KI-Nutri-Score Tabs">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              className={`sidebar-link ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <span className="sidebar-icon">{tab.icon}</span>
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </nav>
+        <div className="mobile-nav-panel">
+          <nav className={`sidebar-nav ${mobileNavOpen ? 'open' : ''}`} id="mobile-sidebar-nav" aria-label="KI-Nutri-Score Tabs">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                className={`sidebar-link ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => {
+                  setActiveTab(tab.id)
+                  setMobileNavOpen(false)
+                }}
+              >
+                <span className="sidebar-icon">{tab.icon}</span>
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </nav>
 
-        <div className="audience-section">
+          <div className="audience-section">
           <p className="sidebar-heading">Ansicht für</p>
           <div className="audience-toggle" role="group" aria-label="Privat- oder Unternehmens-Ansicht">
             <button
@@ -232,37 +252,38 @@ function App() {
           </div>
         </div>
 
-        <div className="viewmode-toggle" role="group" aria-label="Anzeige-Modus">
-          <button
-            type="button"
-            className={`viewmode-btn ${mode === 'einfach' ? 'active' : ''}`}
-            onClick={() => setMode('einfach')}
-          >
-            Einfach
-          </button>
-          <button
-            type="button"
-            className={`viewmode-btn ${mode === 'erweitert' ? 'active' : ''}`}
-            onClick={() => setMode('erweitert')}
-          >
-            Erweitert
-          </button>
-        </div>
-        {mode === 'einfach' && <p className="sidebar-legend">Zeigt nur das Wesentliche.</p>}
-
-        <div className="nutri-score-sidebar" aria-label="Nutri-Score-Label">
-          {nutriScoreSteps.map((step) => (
-            <div
-              key={step.letter}
-              className={`nutri-score-letter ${step.active ? 'active' : ''}`}
-              style={{ opacity: step.opacity, color: step.color }}
+          <div className="viewmode-toggle" role="group" aria-label="Anzeige-Modus">
+            <button
+              type="button"
+              className={`viewmode-btn ${mode === 'einfach' ? 'active' : ''}`}
+              onClick={() => setMode('einfach')}
             >
-              {step.letter}
-            </div>
-          ))}
+              Einfach
+            </button>
+            <button
+              type="button"
+              className={`viewmode-btn ${mode === 'erweitert' ? 'active' : ''}`}
+              onClick={() => setMode('erweitert')}
+            >
+              Erweitert
+            </button>
+          </div>
+          {mode === 'einfach' && <p className="sidebar-legend">Zeigt nur das Wesentliche.</p>}
+
+          <div className="nutri-score-sidebar" aria-label="Nutri-Score-Label">
+            {nutriScoreSteps.map((step) => (
+              <div
+                key={step.letter}
+                className={`nutri-score-letter ${step.active ? 'active' : ''}`}
+                style={{ opacity: step.opacity, color: step.color }}
+              >
+                {step.letter}
+              </div>
+            ))}
+          </div>
+          <p className="sidebar-legend">A = sehr angemessen · E = unangemessen</p>
+          <PrivacyNotice />
         </div>
-        <p className="sidebar-legend">A = sehr angemessen · E = unangemessen</p>
-        <PrivacyNotice />
       </aside>
 
       <section className="main-panel">

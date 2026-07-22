@@ -66,7 +66,9 @@ export function PrivacyNotice() {
 
               <p>
                 <strong>Bei Fragen:</strong>{' '}
-                <span className="privacy-contact-placeholder">[Platzhalter für eure Kontakt-Mail]</span>
+                <a className="privacy-contact-link" href="mailto:ki.nutri.score@gmail.com">
+                  ki.nutri.score@gmail.com
+                </a>
               </p>
             </div>
           </div>,
