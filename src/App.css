@@ -70,10 +70,11 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  background: linear-gradient(135deg, #14b8a6 0%, #6366f1 100%);
+  display: block;
+  object-fit: contain;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(99, 102, 241, 0.12) 100%);
+  padding: 2px;
+  box-sizing: border-box;
 }
 
 .brand-title,

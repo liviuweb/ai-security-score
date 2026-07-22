@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
+import logoImage from '/logo.png'
 import { modelProfiles, scenarios, type ModelClass, type Scenario } from './scenarios'
 import { calculateScore, formatCostValue, formatEnergyValue, type ScoreResult } from './score'
 import { formatCo2, sanitizeCo2Text } from './formatCo2'
@@ -193,7 +194,7 @@ function App() {
       <aside className={`sidebar ${mobileNavOpen ? 'mobile-nav-open' : ''}`}>
         <div className="sidebar-top">
           <div className="sidebar-brand">
-            <div className="brand-mark">KI</div>
+            <img className="brand-mark" src={logoImage} alt="KI-Nutri-Score Logo" />
             <div>
               <p className="brand-title">Nutri-Score</p>
               <p className="brand-subtitle">Angemessenheit</p>
