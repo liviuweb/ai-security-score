@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages
 
+# Nur manuell auslösbar, bis geklärt ist, ob und wo das Tool öffentlich
+# stehen soll — kein automatisches Deployment bei Push auf main.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
