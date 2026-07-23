@@ -113,7 +113,9 @@ function App() {
 
         <div className="content-scroll">
           {activeTab === 'start' && <StartTab />}
-          {activeTab === 'usecase' && <UseCaseTab useCase={useCase} onChange={setUseCase} />}
+          {activeTab === 'usecase' && (
+            <UseCaseTab useCase={useCase} onChange={setUseCase} onNavigate={setActiveTab} mode={mode} />
+          )}
           {activeTab === 'exposure' && <ExposureTab useCase={useCase} />}
           {activeTab === 'compliance' && <ComplianceTab useCase={useCase} />}
           {activeTab === 'bibliothek' && <BibliothekTab onLoad={setUseCase} />}
