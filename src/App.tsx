@@ -122,13 +122,13 @@ function App() {
         </header>
 
         <div className="content-scroll">
-          {activeTab === 'start' && <StartTab />}
+          {activeTab === 'start' && <StartTab onNavigate={setActiveTab} />}
           {activeTab === 'usecase' && (
             <UseCaseTab useCase={useCase} onChange={setUseCase} onNavigate={setActiveTab} mode={mode} />
           )}
           {activeTab === 'exposure' && <ExposureTab useCase={useCase} />}
           {activeTab === 'compliance' && <ComplianceTab useCase={useCase} onChange={setUseCase} />}
-          {activeTab === 'bibliothek' && <BibliothekTab onLoad={setUseCase} />}
+          {activeTab === 'bibliothek' && <BibliothekTab onLoad={setUseCase} onNavigate={setActiveTab} />}
           {activeTab === 'methodik' && <MethodikTab />}
         </div>
       </section>

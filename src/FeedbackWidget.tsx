@@ -90,7 +90,7 @@ export function FeedbackWidget() {
               </div>
             ) : (
               <>
-                <h3 id="feedback-modal-title">Wie gefällt dir der KI-Nutri-Score?</h3>
+                <h3 id="feedback-modal-title">Wie gefällt dir der AI Security Score?</h3>
                 <p className="feedback-modal-sub">Deine Rückmeldung hilft uns, das Tool zu verbessern.</p>
 
                 <div className="feedback-stars" role="radiogroup" aria-label="Bewertung von 1 bis 5 Sternen">

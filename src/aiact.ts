@@ -454,7 +454,7 @@ export function berechneAiAct(uc: UseCase, rolle: Rolle = 'betreiber'): AiActErg
 
   const pflichten: Pflicht[] = PFLICHTEN_KATALOG.filter((p) => p.gilt_fuer.includes(rolle))
     .filter((p) => p.zutreffend(uc, aktiveKlassen))
-    .map(({ zutreffend, ...rest }) => ({
+    .map(({ zutreffend: _zutreffend, ...rest }) => ({
       ...rest,
       erfuellt: uc.kontrollen.includes(rest.id),
     }))

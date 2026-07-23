@@ -4509,3 +4509,169 @@ textarea {
   color: #94a3b8;
   line-height: 1.6;
 }
+
+/* ── Bibliothek-Tab (Block 5) ── */
+.bibliothek-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bibliothek-filterleiste {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.bibliothek-filterleiste select {
+  min-width: 10rem;
+}
+
+.bibliothek-paar-panel {
+  border-color: #c7d2fe;
+  background: linear-gradient(135deg, #eef2ff 0%, #fff 100%);
+}
+
+.bibliothek-paar-panel code {
+  background: rgba(15, 23, 42, 0.07);
+  border-radius: 4px;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.85em;
+}
+
+.bibliothek-paar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.bibliothek-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.bibliothek-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bibliothek-card h3 {
+  margin: 0;
+}
+
+.bibliothek-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.bibliothek-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.bibliothek-badge-gruen { background: #166534; }
+.bibliothek-badge-gelb { background: #f59e0b; }
+.bibliothek-badge-rot { background: #dc2626; }
+
+.bibliothek-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.bibliothek-lehrpunkt {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #334155;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .bibliothek-paar-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Start-Tab (Block 5) ── */
+.start-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.start-cta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.start-uebersicht-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.start-uebersicht-grid h3 {
+  margin-top: 0;
+}
+
+.start-uebersicht-grid ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #334155;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+  .start-uebersicht-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Methodik-Tab (Block 5) ── */
+.methodik-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.methodik-shell h3 {
+  margin: 1.25rem 0 0.5rem;
+}
+
+.methodik-shell ul {
+  margin: 0.25rem 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.methodik-fristen-liste {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.methodik-grenzen ul {
+  color: #475569;
+}
