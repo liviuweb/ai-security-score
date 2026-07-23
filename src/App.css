@@ -4083,3 +4083,220 @@ textarea {
   .breakdown-uncertainty { color: #475569; border-top-color: #334155; }
   .breakdown-reasoning { color: #cbd5e1; }
 }
+
+/* ── Exposure-Tab (Block 3) ── */
+.exposure-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.helper-note {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.exposure-ampel-panel,
+.exposure-stufe-panel {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.exposure-ampel-large {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 6px rgba(15, 23, 42, 0.04);
+}
+
+.exposure-ampel-gruen { background: #166534; }
+.exposure-ampel-gelb { background: #f59e0b; }
+.exposure-ampel-rot { background: #dc2626; }
+
+.exposure-ampel-label {
+  margin: 0 0 0.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.exposure-stufe-a, .exposure-stufe-b { color: #166534; }
+.exposure-stufe-c, .exposure-stufe-d { color: #b45309; }
+.exposure-stufe-e, .exposure-stufe-kritisch { color: #dc2626; }
+
+.exposure-risikowert {
+  margin: 0 0 0.3rem;
+}
+
+.exposure-trifecta-panel {
+  border-color: #fecaca;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff 100%);
+}
+
+.exposure-trifecta-panel h2 {
+  color: #991b1b;
+  margin-top: 0;
+}
+
+.exposure-trifecta-liste {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.exposure-trifecta-liste li {
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #fecaca;
+  font-size: 0.9rem;
+}
+
+.exposure-trifecta-liste li.erfuellt {
+  border-color: #f87171;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.exposure-trifecta-liste li.nicht-erfuellt {
+  color: #64748b;
+}
+
+.exposure-trifecta-status {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.exposure-trifecta-status.erfuellt {
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.exposure-massnahmen-liste {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.exposure-summenzeile td {
+  font-weight: 700;
+  border-top: 2px solid #cbd5e1;
+}
+
+.exposure-summenzeile-text {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+.exposure-verschaerfungen-liste,
+.exposure-owasp-liste,
+.exposure-massnahmen-liste-specialist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exposure-verschaerfungen-liste li,
+.exposure-owasp-liste li,
+.exposure-massnahmen-liste-specialist li {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.9rem;
+}
+
+.exposure-owasp-liste p,
+.exposure-massnahmen-liste-specialist p {
+  margin: 0.35rem 0 0;
+  color: #334155;
+}
+
+.owasp-badge {
+  display: inline-block;
+  background: #0f172a;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 0.4rem;
+}
+
+.exposure-massnahme-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.exposure-massnahme-ausloeser {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.massnahme-wirksamkeit {
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wirksamkeit-hoch { background: #dcfce7; color: #166534; }
+.wirksamkeit-mittel { background: #fef3c7; color: #92400e; }
+.wirksamkeit-ergaenzend { background: #e2e8f0; color: #475569; }
+
+.exposure-abbr {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+.exposure-glossar dl {
+  margin: 0.75rem 0 0;
+}
+
+.exposure-glossar-eintrag {
+  margin-bottom: 0.6rem;
+}
+
+.exposure-glossar-eintrag dt {
+  font-weight: 700;
+}
+
+.exposure-glossar-eintrag dd {
+  margin: 0.15rem 0 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.exposure-disclaimer {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+  .exposure-ampel-panel,
+  .exposure-stufe-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

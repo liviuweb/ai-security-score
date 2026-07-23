@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { PrivacyNotice } from './PrivacyNotice'
 import { FeedbackWidget } from './FeedbackWidget'
-import { useViewMode } from './ViewModeContext'
+import { useViewMode, type ViewMode } from './ViewModeContext'
 import { createLeeresUseCase, type UseCase } from './types'
 import { StartTab } from './tabs/StartTab'
 import { UseCaseTab } from './tabs/UseCaseTab'
@@ -13,13 +13,23 @@ import { MethodikTab } from './tabs/MethodikTab'
 
 type TabKey = 'start' | 'usecase' | 'exposure' | 'compliance' | 'bibliothek' | 'methodik'
 
-const TAB_META: Record<TabKey, { label: string; icon: string }> = {
-  start: { label: 'Start', icon: '◉' },
-  usecase: { label: 'Use-Case', icon: '▣' },
-  exposure: { label: 'Exposure', icon: '⚠' },
-  compliance: { label: 'Compliance', icon: '✓' },
-  bibliothek: { label: 'Bibliothek', icon: '▤' },
-  methodik: { label: 'Methodik', icon: '⚙' },
+const TAB_META: Record<ViewMode, Record<TabKey, { label: string; icon: string }>> = {
+  normal: {
+    start: { label: 'Start', icon: '◉' },
+    usecase: { label: 'Use-Case', icon: '▣' },
+    exposure: { label: 'Risiko', icon: '⚠' },
+    compliance: { label: 'Pflichten', icon: '✓' },
+    bibliothek: { label: 'Bibliothek', icon: '▤' },
+    methodik: { label: 'Methodik', icon: '⚙' },
+  },
+  specialist: {
+    start: { label: 'Start', icon: '◉' },
+    usecase: { label: 'Use-Case', icon: '▣' },
+    exposure: { label: 'Exposure', icon: '⚠' },
+    compliance: { label: 'Compliance', icon: '✓' },
+    bibliothek: { label: 'Bibliothek', icon: '▤' },
+    methodik: { label: 'Methodik', icon: '⚙' },
+  },
 }
 
 function App() {
@@ -28,13 +38,13 @@ function App() {
   const [useCase, setUseCase] = useState<UseCase>(createLeeresUseCase())
   const { mode, setMode } = useViewMode()
 
-  const tabs = (Object.keys(TAB_META) as TabKey[]).map((id) => ({
+  const tabs = (Object.keys(TAB_META[mode]) as TabKey[]).map((id) => ({
     id,
-    icon: TAB_META[id].icon,
-    label: mode === 'specialist' && id === 'start' ? 'Methodik-Übersicht' : TAB_META[id].label,
+    icon: TAB_META[mode][id].icon,
+    label: TAB_META[mode][id].label,
   }))
 
-  const activeLabel = mode === 'specialist' && activeTab === 'start' ? 'Methodik-Übersicht' : TAB_META[activeTab].label
+  const activeLabel = TAB_META[mode][activeTab].label
 
   return (
     <main className="app-shell">
