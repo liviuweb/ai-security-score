@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import type { UseCase } from '../types'
 import { useViewMode } from '../ViewModeContext'
 import { berechneExposure, EXFILTRATION_TOOLS, type Ampel, type ExposureErgebnis } from '../exposure'
+import bannerExposure from '../assets/banner-exposure.jpg'
 
 interface ExposureTabProps {
   useCase: UseCase
@@ -53,6 +54,7 @@ export function ExposureTab({ useCase }: ExposureTabProps) {
 
   return (
     <div className="exposure-shell">
+      {mode === 'normal' && <img src={bannerExposure} alt="" className="tab-banner" loading="lazy" />}
       {mode === 'specialist' ? (
         <SpecialistAnsicht ergebnis={ergebnis} useCase={useCase} />
       ) : (

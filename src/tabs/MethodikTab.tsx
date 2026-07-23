@@ -25,6 +25,7 @@ import {
   AIACT_VERORDNUNG,
   SELBSTPRUEFUNG_VERBOTSTATBESTAENDE,
 } from '../aiact'
+import bannerMethodik from '../assets/banner-methodik.jpg'
 
 function wertebereich(record: Record<string, number>): string {
   const werte = Object.values(record)
@@ -76,6 +77,7 @@ export function MethodikTab() {
 function NormalMethodik() {
   return (
     <div className="methodik-shell">
+      <img src={bannerMethodik} alt="" className="tab-banner" loading="lazy" />
       <section className="panel hero-card">
         <p className="eyebrow">Methodik (Kurzfassung)</p>
         <h2>Wie die Bewertung zustande kommt</h2>

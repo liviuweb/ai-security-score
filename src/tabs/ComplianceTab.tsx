@@ -10,6 +10,7 @@ import {
   type AiActKlasse,
   type Rolle,
 } from '../aiact'
+import bannerCompliance from '../assets/banner-compliance.jpg'
 
 interface ComplianceTabProps {
   useCase: UseCase
@@ -89,6 +90,7 @@ export function ComplianceTab({ useCase, onChange }: ComplianceTabProps) {
 
   return (
     <div className="compliance-shell">
+      {mode === 'normal' && <img src={bannerCompliance} alt="" className="tab-banner" loading="lazy" />}
       {mode === 'specialist' ? (
         <SpecialistAnsicht
           ergebnis={ergebnis}

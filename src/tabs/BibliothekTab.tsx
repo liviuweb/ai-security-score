@@ -4,6 +4,7 @@ import { useViewMode } from '../ViewModeContext'
 import { berechneExposure, type Ampel, type ExposureErgebnis, type ExposureStufe } from '../exposure'
 import { berechneAiAct, type AiActErgebnis, type AiActKlasse } from '../aiact'
 import { securityScenarios, type SecurityScenario } from '../securityScenarios'
+import bannerBibliothek from '../assets/banner-bibliothek.jpg'
 
 type TabKey = 'start' | 'usecase' | 'exposure' | 'compliance' | 'bibliothek' | 'methodik'
 
@@ -67,6 +68,7 @@ export function BibliothekTab({ onLoad, onNavigate }: BibliothekTabProps) {
 
   return (
     <div className="bibliothek-shell">
+      {mode === 'normal' && <img src={bannerBibliothek} alt="" className="tab-banner" loading="lazy" />}
       <section className="panel">
         <div className="panel-heading">
           <h2>Bibliothek</h2>

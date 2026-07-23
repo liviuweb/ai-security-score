@@ -1,4 +1,7 @@
 import { useViewMode } from '../ViewModeContext'
+import heroStart from '../assets/hero-start.jpg'
+import injectionImg from '../assets/injection.jpg'
+import trifectaImg from '../assets/trifecta.jpg'
 
 type TabKey = 'start' | 'usecase' | 'exposure' | 'compliance' | 'bibliothek' | 'methodik'
 
@@ -12,10 +15,22 @@ export function StartTab({ onNavigate }: StartTabProps) {
   return mode === 'specialist' ? <SpecialistUebersicht onNavigate={onNavigate} /> : <NormalEinfuehrung onNavigate={onNavigate} />
 }
 
+function HeroMedia({ compact }: { compact: boolean }) {
+  return (
+    <div className={`start-hero-media ${compact ? 'start-hero-compact' : ''}`}>
+      <img src={heroStart} alt="" className="start-hero-img" loading="eager" />
+      <div className="start-hero-overlay">
+        <h1>AI-Security-Score</h1>
+      </div>
+    </div>
+  )
+}
+
 function NormalEinfuehrung({ onNavigate }: StartTabProps) {
   return (
     <div className="start-shell">
       <section className="panel hero-card">
+        <HeroMedia compact={false} />
         <p className="eyebrow">Was ist AI Security?</p>
         <h2>Fünf Dinge, die ihr wissen solltet, bevor ihr einen KI-Einsatz plant</h2>
       </section>
@@ -32,23 +47,29 @@ function NormalEinfuehrung({ onNavigate }: StartTabProps) {
 
       <section className="panel">
         <h3>2. Prompt Injection — versteckte Anweisungen</h3>
-        <p>
-          Wenn eine KI Texte liest, die von außen kommen, kann sie darin versteckte Anweisungen finden und
-          ausführen. Sie unterscheidet nicht zuverlässig zwischen „das soll ich lesen" und „das soll ich tun". Ein
-          Beispiel: In einer Webseite steht in weißer Schrift auf weißem Grund eine Anweisung an die KI. Ein Mensch
-          sieht sie nicht — die KI liest sie trotzdem und kann ihr folgen.
-        </p>
+        <div className="start-inline-section">
+          <p>
+            Wenn eine KI Texte liest, die von außen kommen, kann sie darin versteckte Anweisungen finden und
+            ausführen. Sie unterscheidet nicht zuverlässig zwischen „das soll ich lesen" und „das soll ich tun".
+            Ein Beispiel: In einer Webseite steht in weißer Schrift auf weißem Grund eine Anweisung an die KI. Ein
+            Mensch sieht sie nicht — die KI liest sie trotzdem und kann ihr folgen.
+          </p>
+          <img src={injectionImg} alt="" className="inline-bild" loading="lazy" />
+        </div>
       </section>
 
       <section className="panel">
         <h3>3. Die gefährliche Dreier-Kombination</h3>
-        <p>
-          Manche KI-Systeme haben gleichzeitig drei Eigenschaften: Zugriff auf vertrauliche Daten, die Fähigkeit,
-          fremde Inhalte zu verarbeiten, und einen Weg, Daten nach außen zu schicken. Jede einzelne Eigenschaft für
-          sich ist unproblematisch. Erst alle drei zusammen machen es möglich, dass jemand von außen die KI dazu
-          bringt, eure Daten zu verschicken — ohne dass ihr etwas davon merkt. Deshalb prüft dieses Tool diese
-          Kombination als eigene, besonders strenge Regel.
-        </p>
+        <div className="start-inline-section">
+          <img src={trifectaImg} alt="" className="inline-bild" loading="lazy" />
+          <p>
+            Manche KI-Systeme haben gleichzeitig drei Eigenschaften: Zugriff auf vertrauliche Daten, die Fähigkeit,
+            fremde Inhalte zu verarbeiten, und einen Weg, Daten nach außen zu schicken. Jede einzelne Eigenschaft
+            für sich ist unproblematisch. Erst alle drei zusammen machen es möglich, dass jemand von außen die KI
+            dazu bringt, eure Daten zu verschicken — ohne dass ihr etwas davon merkt. Deshalb prüft dieses Tool
+            diese Kombination als eigene, besonders strenge Regel.
+          </p>
+        </div>
       </section>
 
       <section className="panel">
@@ -86,6 +107,7 @@ function SpecialistUebersicht({ onNavigate }: StartTabProps) {
   return (
     <div className="start-shell">
       <section className="panel hero-card">
+        <HeroMedia compact={true} />
         <p className="eyebrow">Übersicht</p>
         <h2>Was dieses Tool berechnet — und was nicht</h2>
       </section>
