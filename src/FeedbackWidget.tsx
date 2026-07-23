@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { supabase } from './lib/supabase'
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -44,15 +43,11 @@ export function FeedbackWidget() {
     setStatus('submitting')
 
     try {
-      const { error } = await supabase.from('feedback').insert({
-        rating,
-        message: message.trim() || null,
-        page: window.location.pathname,
-      })
-      if (error) throw error
+      const mailtoLink = `mailto:ai.security.score@example.com?subject=Feedback%20AI-Security-Score&body=${encodeURIComponent(`Bewertung: ${rating}/5\n\n${message.trim()}`)}`
+      window.location.href = mailtoLink
       setStatus('success')
     } catch (error) {
-      console.error('FeedbackWidget: insert failed', error)
+      console.error('FeedbackWidget: mailto failed', error)
       setStatus('error')
     }
   }
