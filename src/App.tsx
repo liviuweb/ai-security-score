@@ -127,7 +127,7 @@ function App() {
             <UseCaseTab useCase={useCase} onChange={setUseCase} onNavigate={setActiveTab} mode={mode} />
           )}
           {activeTab === 'exposure' && <ExposureTab useCase={useCase} />}
-          {activeTab === 'compliance' && <ComplianceTab useCase={useCase} />}
+          {activeTab === 'compliance' && <ComplianceTab useCase={useCase} onChange={setUseCase} />}
           {activeTab === 'bibliothek' && <BibliothekTab onLoad={setUseCase} />}
           {activeTab === 'methodik' && <MethodikTab />}
         </div>
