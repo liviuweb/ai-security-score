@@ -71,7 +71,7 @@ const ABGEBILDETE_ARTIKEL = [
 
 export function MethodikTab() {
   const { mode } = useViewMode()
-  return mode === 'specialist' ? <SpecialistMethodik /> : <NormalMethodik />
+  return mode === 'experte' ? <SpecialistMethodik /> : <NormalMethodik />
 }
 
 function NormalMethodik() {
@@ -106,7 +106,7 @@ function NormalMethodik() {
         <h3>Grenzen</h3>
         <p>
           Die Gewichte sind fachlich gesetzt, nicht wissenschaftlich validiert. Das Tool ersetzt keine
-          Bedrohungsmodellierung und keine Rechtsberatung. Wechselt in den Specialist-Modus für die vollständige
+          Bedrohungsmodellierung und keine Rechtsberatung. Wechselt in den Experte-Modus für die vollständige
           Offenlegung aller Zahlen, Schwellen und Artikelverweise.
         </p>
       </section>

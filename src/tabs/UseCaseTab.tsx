@@ -13,19 +13,19 @@ interface UseCaseTabProps {
 }
 
 const FELD_SICHTBAR: Record<string, ViewMode[]> = {
-  name: ['normal', 'specialist'],
-  beschreibung: ['normal', 'specialist'],
-  domaene: ['normal', 'specialist'],
-  datenklasse: ['normal', 'specialist'],
-  betroffene: ['normal', 'specialist'],
-  untrustedInput: ['normal', 'specialist'],
-  externeKommunikation: ['normal', 'specialist'],
-  tools: ['normal', 'specialist'],
-  autonomie: ['normal', 'specialist'],
-  deployment: ['normal', 'specialist'],
-  generiertOeffentlicheInhalte: ['normal', 'specialist'],
-  biometrisch: ['specialist'],
-  emotionserkennung: ['specialist'],
+  name: ['basis', 'standard', 'experte'],
+  beschreibung: ['basis', 'standard', 'experte'],
+  domaene: ['basis', 'standard', 'experte'],
+  datenklasse: ['basis', 'standard', 'experte'],
+  betroffene: ['basis', 'standard', 'experte'],
+  untrustedInput: ['basis', 'standard', 'experte'],
+  externeKommunikation: ['basis', 'standard', 'experte'],
+  tools: ['basis', 'standard', 'experte'],
+  autonomie: ['basis', 'standard', 'experte'],
+  deployment: ['basis', 'standard', 'experte'],
+  generiertOeffentlicheInhalte: ['basis', 'standard', 'experte'],
+  biometrisch: ['experte'],
+  emotionserkennung: ['experte'],
 }
 
 const SECTION_ORDER = ['grunddaten', 'daten', 'agent', 'deployment'] as const
@@ -56,9 +56,9 @@ function getFieldHelp(field: string, mode: ViewMode) {
 
 export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabProps) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    daten: mode === 'specialist',
-    agent: mode === 'specialist',
-    deployment: mode === 'specialist',
+    daten: mode === 'experte',
+    agent: mode === 'experte',
+    deployment: mode === 'experte',
   })
 
   const visibleSections = useMemo(() => {
@@ -100,7 +100,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
       <section key={section} className="panel">
         <div className="panel-heading">
           <h2>{section === 'grunddaten' ? 'Grunddaten' : section === 'daten' ? 'Daten' : section === 'agent' ? 'Agent & Tools' : 'Deployment & Sonderfälle'}</h2>
-          {mode === 'normal' && canShowExtra && (
+          {(mode === 'basis' || mode === 'standard') && canShowExtra && (
             <button type="button" className="inline-link" onClick={() => toggleSection(section)}>
               {isExpanded ? 'Weniger anzeigen' : 'Erweiterte Angaben'}
             </button>
@@ -108,17 +108,17 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
         </div>
 
         {section === 'grunddaten' && (
-          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
+          <div className={`form-grid ${mode === 'experte' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('name', mode)}</span>
               <input value={useCase.name} onChange={(event) => updateField('name', event.target.value)} />
-              {mode === 'normal' && <small>{getFieldHelp('name', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('name', mode)}</small>}
             </label>
 
             <label className="field-card">
               <span>{getFieldLabel('beschreibung', mode)}</span>
               <textarea rows={4} value={useCase.beschreibung} onChange={(event) => updateField('beschreibung', event.target.value)} />
-              {mode === 'normal' && <small>{getFieldHelp('beschreibung', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('beschreibung', mode)}</small>}
             </label>
 
             <label className="field-card">
@@ -130,16 +130,16 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                   </option>
                 ))}
               </select>
-              {mode === 'normal' && <small>{getFieldHelp('domaene', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('domaene', mode)}</small>}
             </label>
           </div>
         )}
 
         {section === 'daten' && (
-          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
+          <div className={`form-grid ${mode === 'experte' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('datenklasse', mode)}</span>
-              {mode === 'normal' ? (
+              {(mode === 'basis' || mode === 'standard') ? (
                 <div className="choice-list">
                   {Object.entries(feldTexte.datenklasse.optionen).map(([value, label]) => (
                     <label key={value} className="choice-option">
@@ -150,7 +150,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                         checked={useCase.datenklasse === value}
                         onChange={() => updateField('datenklasse', value as UseCase['datenklasse'])}
                       />
-                      <span>{label.normal}</span>
+                      <span>{label[mode]}</span>
                     </label>
                   ))}
                 </div>
@@ -158,12 +158,12 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                 <select value={useCase.datenklasse} onChange={(event) => updateField('datenklasse', event.target.value as UseCase['datenklasse'])}>
                   {Object.entries(feldTexte.datenklasse.optionen).map(([value, label]) => (
                     <option key={value} value={value}>
-                      {label.specialist}
+                      {label[mode]}
                     </option>
                   ))}
                 </select>
               )}
-              {mode === 'normal' && <small>{getFieldHelp('datenklasse', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('datenklasse', mode)}</small>}
             </label>
 
             <label className="field-card">
@@ -176,10 +176,10 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                 ))}
               </div>
               <input type="number" min="1" value={useCase.betroffene} onChange={(event) => updateField('betroffene', Number(event.target.value))} />
-              {mode === 'normal' && <small>{getFieldHelp('betroffene', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('betroffene', mode)}</small>}
             </label>
 
-            {mode === 'specialist' && (
+            {mode === 'experte' && (
               <div className="field-card">
                 <span>{getFieldLabel('biometrisch', mode)}</span>
                 <label className="choice-option">
@@ -189,7 +189,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
               </div>
             )}
 
-            {mode === 'normal' && isExpanded && (
+            {(mode === 'basis' || mode === 'standard') && isExpanded && (
               <div className="field-card expanded-card">
                 <span>{getFieldLabel('biometrisch', mode)}</span>
                 <label className="choice-option">
@@ -203,7 +203,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
         )}
 
         {section === 'agent' && (
-          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
+          <div className={`form-grid ${mode === 'experte' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('untrustedInput', mode)}</span>
               <div className="choice-list">
@@ -216,7 +216,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                   <span>Nein</span>
                 </label>
               </div>
-              {mode === 'normal' && <small>{getFieldHelp('untrustedInput', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('untrustedInput', mode)}</small>}
             </label>
 
             <label className="field-card">
@@ -231,7 +231,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                   <span>Nein</span>
                 </label>
               </div>
-              {mode === 'normal' && <small>{getFieldHelp('externeKommunikation', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('externeKommunikation', mode)}</small>}
             </label>
 
             <label className="field-card">
@@ -249,7 +249,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                   </label>
                 ))}
               </div>
-              {mode === 'normal' && <small>{getFieldHelp('tools', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('tools', mode)}</small>}
             </label>
 
             <label className="field-card">
@@ -268,13 +268,13 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                   </label>
                 ))}
               </div>
-              {mode === 'normal' && <small>{getFieldHelp('autonomie', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('autonomie', mode)}</small>}
             </label>
           </div>
         )}
 
         {section === 'deployment' && (
-          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
+          <div className={`form-grid ${mode === 'experte' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('deployment', mode)}</span>
               <div className="choice-list">
@@ -291,7 +291,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                   </label>
                 ))}
               </div>
-              {mode === 'normal' && <small>{getFieldHelp('deployment', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('deployment', mode)}</small>}
             </label>
 
             <label className="field-card">
@@ -306,10 +306,10 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                   <span>Nein</span>
                 </label>
               </div>
-              {mode === 'normal' && <small>{getFieldHelp('generiertOeffentlicheInhalte', mode)}</small>}
+              {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('generiertOeffentlicheInhalte', mode)}</small>}
             </label>
 
-            {mode === 'specialist' && (
+            {mode === 'experte' && (
               <div className="field-card">
                 <span>{getFieldLabel('biometrisch', mode)}</span>
                 <label className="choice-option">
@@ -319,7 +319,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
               </div>
             )}
 
-            {mode === 'specialist' && (
+            {mode === 'experte' && (
               <div className="field-card">
                 <span>{getFieldLabel('emotionserkennung', mode)}</span>
                 <label className="choice-option">
@@ -329,7 +329,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
               </div>
             )}
 
-            {mode === 'normal' && isExpanded && (
+            {(mode === 'basis' || mode === 'standard') && isExpanded && (
               <div className="field-card expanded-card">
                 <span>{getFieldLabel('biometrisch', mode)}</span>
                 <label className="choice-option">
@@ -339,7 +339,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
                 <small>{getFieldHelp('biometrisch', mode)}</small>
               </div>
             )}
-            {mode === 'normal' && isExpanded && (
+            {(mode === 'basis' || mode === 'standard') && isExpanded && (
               <div className="field-card expanded-card">
                 <span>{getFieldLabel('emotionserkennung', mode)}</span>
                 <label className="choice-option">
@@ -352,8 +352,8 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
           </div>
         )}
 
-        {mode === 'normal' && sektionsTexte.sonderfaelle.normal && (
-          <p className="helper-note">{sektionsTexte.sonderfaelle.normal}</p>
+        {(mode === 'basis' || mode === 'standard') && sektionsTexte.sonderfaelle[mode] && (
+          <p className="helper-note">{sektionsTexte.sonderfaelle[mode]}</p>
         )}
       </section>
     )

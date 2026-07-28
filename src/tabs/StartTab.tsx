@@ -12,7 +12,7 @@ interface StartTabProps {
 export function StartTab({ onNavigate }: StartTabProps) {
   const { mode } = useViewMode()
 
-  return mode === 'specialist' ? <SpecialistUebersicht onNavigate={onNavigate} /> : <NormalEinfuehrung onNavigate={onNavigate} />
+  return mode === 'experte' ? <SpecialistUebersicht onNavigate={onNavigate} /> : <NormalEinfuehrung onNavigate={onNavigate} />
 }
 
 function HeroMedia({ compact }: { compact: boolean }) {

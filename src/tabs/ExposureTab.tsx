@@ -54,13 +54,13 @@ export function ExposureTab({ useCase }: ExposureTabProps) {
 
   return (
     <div className="exposure-shell">
-      {mode === 'normal' && <img src={bannerExposure} alt="" className="tab-banner" loading="lazy" />}
-      {mode === 'specialist' ? (
+      {(mode === 'basis' || mode === 'standard') && <img src={bannerExposure} alt="" className="tab-banner" loading="lazy" />}
+      {mode === 'experte' ? (
         <SpecialistAnsicht ergebnis={ergebnis} useCase={useCase} />
       ) : (
         <NormalAnsicht ergebnis={ergebnis} />
       )}
-      <Disclaimer ausfuehrlich={mode === 'specialist'} />
+      <Disclaimer ausfuehrlich={mode === 'experte'} />
     </div>
   )
 }

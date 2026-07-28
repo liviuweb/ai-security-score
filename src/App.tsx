@@ -14,7 +14,7 @@ import { MethodikTab } from './tabs/MethodikTab'
 type TabKey = 'start' | 'usecase' | 'exposure' | 'compliance' | 'bibliothek' | 'methodik'
 
 const TAB_META: Record<ViewMode, Record<TabKey, { label: string; icon: string }>> = {
-  normal: {
+  basis: {
     start: { label: 'Start', icon: '◉' },
     usecase: { label: 'Use-Case', icon: '▣' },
     exposure: { label: 'Risiko', icon: '⚠' },
@@ -22,7 +22,15 @@ const TAB_META: Record<ViewMode, Record<TabKey, { label: string; icon: string }>
     bibliothek: { label: 'Bibliothek', icon: '▤' },
     methodik: { label: 'Methodik', icon: '⚙' },
   },
-  specialist: {
+  standard: {
+    start: { label: 'Start', icon: '◉' },
+    usecase: { label: 'Use-Case', icon: '▣' },
+    exposure: { label: 'Risiko', icon: '⚠' },
+    compliance: { label: 'Pflichten', icon: '✓' },
+    bibliothek: { label: 'Bibliothek', icon: '▤' },
+    methodik: { label: 'Methodik', icon: '⚙' },
+  },
+  experte: {
     start: { label: 'Start', icon: '◉' },
     usecase: { label: 'Use-Case', icon: '▣' },
     exposure: { label: 'Exposure', icon: '⚠' },
@@ -90,20 +98,27 @@ function App() {
             ))}
           </nav>
 
-          <div className="viewmode-toggle" role="group" aria-label="Ansichtsmodus">
+          <div className="viewmode-toggle" role="group" aria-label="Detailstufe">
             <button
               type="button"
-              className={`viewmode-btn ${mode === 'normal' ? 'active' : ''}`}
-              onClick={() => setMode('normal')}
+              className={`viewmode-btn ${mode === 'basis' ? 'active' : ''}`}
+              onClick={() => setMode('basis')}
             >
-              Normal
+              Basis
             </button>
             <button
               type="button"
-              className={`viewmode-btn ${mode === 'specialist' ? 'active' : ''}`}
-              onClick={() => setMode('specialist')}
+              className={`viewmode-btn ${mode === 'standard' ? 'active' : ''}`}
+              onClick={() => setMode('standard')}
             >
-              Specialist
+              Standard
+            </button>
+            <button
+              type="button"
+              className={`viewmode-btn ${mode === 'experte' ? 'active' : ''}`}
+              onClick={() => setMode('experte')}
+            >
+              Experte
             </button>
           </div>
 

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { UseCase } from '../types'
-import { useViewMode } from '../ViewModeContext'
+import { useViewMode, type ViewMode } from '../ViewModeContext'
 import { berechneExposure, type Ampel, type ExposureErgebnis, type ExposureStufe } from '../exposure'
 import { berechneAiAct, type AiActErgebnis, type AiActKlasse } from '../aiact'
 import { securityScenarios, type SecurityScenario } from '../securityScenarios'
@@ -34,6 +34,13 @@ const AIACT_KLASSEN: AiActKlasse[] = ['verboten', 'hochrisiko', 'grenzfall', 'tr
 
 const BEWERBUNGS_PAAR_IDS = ['bewerbung-autonom', 'bewerbung-vorschlag']
 
+// securityScenarios.ts hat noch die alte zweistufige Textstruktur {normal, specialist}
+// (Teil 2 der Dreistufen-Umstellung differenziert die Tab-/Szenario-Inhalte).
+// Bis dahin bildet dieser Helper die neuen drei Stufen darauf ab.
+function legacyModeFor(mode: ViewMode): 'normal' | 'specialist' {
+  return mode === 'experte' ? 'specialist' : 'normal'
+}
+
 export function BibliothekTab({ onLoad, onNavigate }: BibliothekTabProps) {
   const { mode } = useViewMode()
   const [filterStufe, setFilterStufe] = useState<ExposureStufe | 'alle'>('alle')
@@ -50,7 +57,7 @@ export function BibliothekTab({ onLoad, onNavigate }: BibliothekTabProps) {
   )
 
   const sichtbar = useMemo(() => {
-    if (mode !== 'specialist') return auswertungen
+    if (mode !== 'experte') return auswertungen
     return auswertungen.filter(({ exposure, aiAct }) => {
       if (filterStufe !== 'alle' && exposure.stufe !== filterStufe) return false
       if (filterKlasse !== 'alle' && aiAct.primaerklasse !== filterKlasse) return false
@@ -68,14 +75,14 @@ export function BibliothekTab({ onLoad, onNavigate }: BibliothekTabProps) {
 
   return (
     <div className="bibliothek-shell">
-      {mode === 'normal' && <img src={bannerBibliothek} alt="" className="tab-banner" loading="lazy" />}
+      {(mode === 'basis' || mode === 'standard') && <img src={bannerBibliothek} alt="" className="tab-banner" loading="lazy" />}
       <section className="panel">
         <div className="panel-heading">
           <h2>Bibliothek</h2>
           <p>Acht durchgerechnete Beispielfälle — zum Nachvollziehen der Bewertungslogik und als Ausgangspunkt für eigene Use-Cases.</p>
         </div>
 
-        {mode === 'specialist' && (
+        {mode === 'experte' && (
           <div className="bibliothek-filterleiste">
             <label className="field-card">
               <span>Exposure-Stufe</span>
@@ -143,20 +150,21 @@ function ScenarioCard({
   onUebernehmen,
 }: {
   eintrag: Auswertung
-  mode: 'normal' | 'specialist'
+  mode: ViewMode
   onUebernehmen: (uc: UseCase) => void
 }) {
   const [lehrpunktOpen, setLehrpunktOpen] = useState(false)
   const { szenario, exposure, aiAct } = eintrag
+  const legacyMode = legacyModeFor(mode)
 
   return (
     <article className="panel bibliothek-card">
       <h3>{szenario.titel}</h3>
-      <p>{szenario.kurzbeschreibung[mode]}</p>
+      <p>{szenario.kurzbeschreibung[legacyMode]}</p>
 
       <div className="bibliothek-badges">
         <span className={`bibliothek-badge bibliothek-badge-${exposure.ampel}`}>
-          {mode === 'specialist' ? `Exposure ${exposure.stufe}` : AMPEL_LABEL[exposure.ampel]}
+          {mode === 'experte' ? `Exposure ${exposure.stufe}` : AMPEL_LABEL[exposure.ampel]}
         </span>
         <span className={`compliance-klasse-badge compliance-klasse-${aiAct.primaerklasse}`}>
           {KLASSE_LABEL[aiAct.primaerklasse]}
@@ -177,7 +185,7 @@ function ScenarioCard({
         </button>
       </div>
 
-      {lehrpunktOpen && <p className="bibliothek-lehrpunkt">{szenario.lehrpunkt[mode]}</p>}
+      {lehrpunktOpen && <p className="bibliothek-lehrpunkt">{szenario.lehrpunkt[legacyMode]}</p>}
     </article>
   )
 }

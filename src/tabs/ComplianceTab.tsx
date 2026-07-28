@@ -76,7 +76,7 @@ function formatDatum(iso: string): string {
 export function ComplianceTab({ useCase, onChange }: ComplianceTabProps) {
   const { mode } = useViewMode()
   const [rolle, setRolle] = useState<Rolle>('betreiber')
-  const aktiveRolle = mode === 'specialist' ? rolle : 'betreiber'
+  const aktiveRolle = mode === 'experte' ? rolle : 'betreiber'
   const ergebnis = useMemo(() => berechneAiAct(useCase, aktiveRolle), [useCase, aktiveRolle])
 
   const toggleKontrolle = (id: string) => {
@@ -90,8 +90,8 @@ export function ComplianceTab({ useCase, onChange }: ComplianceTabProps) {
 
   return (
     <div className="compliance-shell">
-      {mode === 'normal' && <img src={bannerCompliance} alt="" className="tab-banner" loading="lazy" />}
-      {mode === 'specialist' ? (
+      {(mode === 'basis' || mode === 'standard') && <img src={bannerCompliance} alt="" className="tab-banner" loading="lazy" />}
+      {mode === 'experte' ? (
         <SpecialistAnsicht
           ergebnis={ergebnis}
           rolle={rolle}
@@ -102,7 +102,7 @@ export function ComplianceTab({ useCase, onChange }: ComplianceTabProps) {
       ) : (
         <NormalAnsicht ergebnis={ergebnis} onToggleKontrolle={toggleKontrolle} />
       )}
-      <Disclaimer ausfuehrlich={mode === 'specialist'} />
+      <Disclaimer ausfuehrlich={mode === 'experte'} />
     </div>
   )
 }

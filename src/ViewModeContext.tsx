@@ -7,9 +7,9 @@ import {
   type ReactNode,
 } from 'react'
 
-const STORAGE_KEY = 'ai-security-viewmode-v1'
+const STORAGE_KEY = 'ai-security-stufe-v1'
 
-export type ViewMode = 'normal' | 'specialist'
+export type ViewMode = 'basis' | 'standard' | 'experte'
 
 interface ViewModeContextValue {
   mode: ViewMode
@@ -21,9 +21,9 @@ const ViewModeContext = createContext<ViewModeContextValue | null>(null)
 function loadStoredMode(): ViewMode {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw === 'normal' || raw === 'specialist' ? raw : 'normal'
+    return raw === 'basis' || raw === 'standard' || raw === 'experte' ? raw : 'basis'
   } catch {
-    return 'normal'
+    return 'basis'
   }
 }
 
