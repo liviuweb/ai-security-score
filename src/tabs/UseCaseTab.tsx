@@ -108,7 +108,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
         </div>
 
         {section === 'grunddaten' && (
-          <div className="form-grid">
+          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('name', mode)}</span>
               <input value={useCase.name} onChange={(event) => updateField('name', event.target.value)} />
@@ -136,7 +136,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
         )}
 
         {section === 'daten' && (
-          <div className="form-grid">
+          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('datenklasse', mode)}</span>
               {mode === 'normal' ? (
@@ -203,7 +203,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
         )}
 
         {section === 'agent' && (
-          <div className="form-grid">
+          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('untrustedInput', mode)}</span>
               <div className="choice-list">
@@ -274,7 +274,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
         )}
 
         {section === 'deployment' && (
-          <div className="form-grid">
+          <div className={`form-grid ${mode === 'specialist' ? 'form-grid-2col' : ''}`}>
             <label className="field-card">
               <span>{getFieldLabel('deployment', mode)}</span>
               <div className="choice-list">
