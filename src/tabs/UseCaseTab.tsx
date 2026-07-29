@@ -236,19 +236,27 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
 
             <label className="field-card">
               <span>{getFieldLabel('tools', mode)}</span>
-              <div className="choice-list">
-                {TOOL_OPTIONS.map((tool) => (
+              <div className="choice-list tools-grid">
+                {TOOL_OPTIONS.filter((tool) => tool.value !== 'keine').map((tool) => (
                   <label key={tool.value} className="choice-option">
                     <input
                       type="checkbox"
                       checked={useCase.tools.includes(tool.value)}
-                      disabled={tool.value === 'keine' ? false : useCase.tools.includes('keine')}
+                      disabled={useCase.tools.includes('keine')}
                       onChange={() => toggleTool(tool.value)}
                     />
                     <span>{tool.label}</span>
                   </label>
                 ))}
               </div>
+              <label className="choice-option choice-option-keine">
+                <input
+                  type="checkbox"
+                  checked={useCase.tools.includes('keine')}
+                  onChange={() => toggleTool('keine')}
+                />
+                <span>Keine Werkzeuge</span>
+              </label>
               {(mode === 'basis' || mode === 'standard') && <small>{getFieldHelp('tools', mode)}</small>}
             </label>
 

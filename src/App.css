@@ -4787,7 +4787,7 @@ textarea {
 
 /* ── Use-Case-Formular ── */
 .form-shell {
-  max-width: 960px;
+  max-width: 720px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -4882,6 +4882,30 @@ textarea {
   height: 1.05rem;
   flex-shrink: 0;
   margin: 0;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.choice-option-keine {
+  margin-top: 0.6rem;
+  border-style: dashed;
+  color: #64748b;
+  background: transparent;
+}
+
+.choice-option-keine:has(input:checked) {
+  border-style: solid;
+  color: #0f172a;
+}
+
+@media (max-width: 640px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .preset-row {
