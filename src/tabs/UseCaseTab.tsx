@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { feldTexte, sektionsTexte } from '../content'
 import type { UseCase } from '../types'
 import type { ViewMode } from '../ViewModeContext'
+import bannerUsecase from '../assets/banner-usecase.jpg'
 
 type TabKey = 'start' | 'usecase' | 'exposure' | 'compliance' | 'bibliothek' | 'methodik'
 
@@ -369,6 +370,7 @@ export function UseCaseTab({ useCase, onChange, onNavigate, mode }: UseCaseTabPr
 
   return (
     <div className="form-shell">
+      {(mode === 'basis' || mode === 'standard') && <img src={bannerUsecase} alt="" className="tab-banner" loading="lazy" />}
       <section className="panel">
         <div className="panel-heading">
           <h2>Use-Case erfassen</h2>
