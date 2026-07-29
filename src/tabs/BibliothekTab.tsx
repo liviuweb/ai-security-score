@@ -34,13 +34,6 @@ const AIACT_KLASSEN: AiActKlasse[] = ['verboten', 'hochrisiko', 'grenzfall', 'tr
 
 const BEWERBUNGS_PAAR_IDS = ['bewerbung-autonom', 'bewerbung-vorschlag']
 
-// securityScenarios.ts hat noch die alte zweistufige Textstruktur {normal, specialist}
-// (Teil 2 der Dreistufen-Umstellung differenziert die Tab-/Szenario-Inhalte).
-// Bis dahin bildet dieser Helper die neuen drei Stufen darauf ab.
-function legacyModeFor(mode: ViewMode): 'normal' | 'specialist' {
-  return mode === 'experte' ? 'specialist' : 'normal'
-}
-
 export function BibliothekTab({ onLoad, onNavigate }: BibliothekTabProps) {
   const { mode } = useViewMode()
   const [filterStufe, setFilterStufe] = useState<ExposureStufe | 'alle'>('alle')
@@ -155,12 +148,11 @@ function ScenarioCard({
 }) {
   const [lehrpunktOpen, setLehrpunktOpen] = useState(false)
   const { szenario, exposure, aiAct } = eintrag
-  const legacyMode = legacyModeFor(mode)
 
   return (
     <article className="panel bibliothek-card">
       <h3>{szenario.titel}</h3>
-      <p>{szenario.kurzbeschreibung[legacyMode]}</p>
+      <p>{szenario.kurzbeschreibung[mode]}</p>
 
       <div className="bibliothek-badges">
         <span className={`bibliothek-badge bibliothek-badge-${exposure.ampel}`}>
@@ -185,7 +177,7 @@ function ScenarioCard({
         </button>
       </div>
 
-      {lehrpunktOpen && <p className="bibliothek-lehrpunkt">{szenario.lehrpunkt[legacyMode]}</p>}
+      {lehrpunktOpen && <p className="bibliothek-lehrpunkt">{szenario.lehrpunkt[mode]}</p>}
     </article>
   )
 }

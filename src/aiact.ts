@@ -26,8 +26,8 @@ const KLASSEN_PRIORITAET: AiActKlasse[] = ['verboten', 'hochrisiko', 'grenzfall'
 export interface Pflicht {
   id: string
   artikel: string // z.B. 'Art. 26 Abs. 1'
-  titel: { normal: string; specialist: string }
-  beschreibung: { normal: string; specialist: string }
+  titel: { basis: string; standard: string; experte: string }
+  beschreibung: { basis: string; standard: string; experte: string }
   gilt_fuer: Rolle[]
   ausgeloest_durch: AiActKlasse
   // Bedingte Pflichten (z.B. Art. 27) zählen nur in den Erfüllungsgrad-Nenner,
@@ -246,10 +246,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'ki-kompetenz',
     artikel: 'Art. 4',
-    titel: { normal: 'Grundlegendes KI-Wissen sicherstellen', specialist: 'KI-Kompetenz der eingesetzten Personen' },
+    titel: {
+      basis: 'Grundlegendes KI-Wissen sicherstellen',
+      standard: 'KI-Kompetenz sicherstellen',
+      experte: 'KI-Kompetenz der eingesetzten Personen',
+    },
     beschreibung: {
-      normal: 'Alle, die mit dem System arbeiten, müssen genug über KI wissen, um es sinnvoll und sicher einzusetzen.',
-      specialist:
+      basis: 'Alle, die mit dem System arbeiten, müssen genug über KI wissen, um es sinnvoll und sicher einzusetzen.',
+      standard: 'Personal und Nutzende müssen über ausreichende KI-Kompetenz verfügen, um das System sicher zu betreiben.',
+      experte:
         'Anbieter und Betreiber ergreifen Maßnahmen, um nach bestem Wissen sicherzustellen, dass ihr Personal und andere mit Betrieb und Nutzung befasste Personen über ein ausreichendes Maß an KI-Kompetenz verfügen (Art. 4).',
     },
     gilt_fuer: ['betreiber', 'anbieter'],
@@ -262,10 +267,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'betriebsanleitung',
     artikel: 'Art. 26 Abs. 1',
-    titel: { normal: 'Nach Anleitung verwenden', specialist: 'Verwendung gemäß Betriebsanleitung' },
+    titel: {
+      basis: 'Nach Anleitung verwenden',
+      standard: 'Betriebsanleitung befolgen',
+      experte: 'Verwendung gemäß Betriebsanleitung',
+    },
     beschreibung: {
-      normal: 'Setzt das System genau so ein, wie es der Anbieter in der Betriebsanleitung vorgesehen hat.',
-      specialist: 'Das Hochrisiko-KI-System ist entsprechend der vom Anbieter beigefügten Betriebsanleitung zu verwenden (Art. 26 Abs. 1).',
+      basis: 'Setzt das System genau so ein, wie es der Anbieter in der Betriebsanleitung vorgesehen hat.',
+      standard: 'Das Hochrisiko-System ist gemäß der vom Anbieter beigefügten Betriebsanleitung zu verwenden.',
+      experte: 'Das Hochrisiko-KI-System ist entsprechend der vom Anbieter beigefügten Betriebsanleitung zu verwenden (Art. 26 Abs. 1).',
     },
     gilt_fuer: ['betreiber'],
     ausgeloest_durch: 'hochrisiko',
@@ -275,10 +285,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'menschliche-aufsicht',
     artikel: 'Art. 26 Abs. 2',
-    titel: { normal: 'Menschliche Aufsicht sicherstellen', specialist: 'Menschliche Aufsicht durch kompetente, befugte Personen' },
+    titel: {
+      basis: 'Menschliche Aufsicht sicherstellen',
+      standard: 'Menschliche Aufsicht sicherstellen',
+      experte: 'Menschliche Aufsicht durch kompetente, befugte Personen',
+    },
     beschreibung: {
-      normal: 'Es muss immer jemand mit ausreichend Wissen und Befugnis die Entscheidungen der KI im Blick behalten und eingreifen können.',
-      specialist:
+      basis: 'Es muss immer jemand mit ausreichend Wissen und Befugnis die Entscheidungen der KI im Blick behalten und eingreifen können.',
+      standard: 'Eine Person mit ausreichender Kompetenz und Befugnis muss die KI-Entscheidungen beaufsichtigen und eingreifen können.',
+      experte:
         'Zuweisung der menschlichen Aufsicht an natürliche Personen mit der erforderlichen Kompetenz, Ausbildung, Autorität und Unterstützung (Art. 26 Abs. 2).',
     },
     gilt_fuer: ['betreiber'],
@@ -289,10 +304,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'eingabedaten-repraesentativ',
     artikel: 'Art. 26 Abs. 4',
-    titel: { normal: 'Passende Eingabedaten verwenden', specialist: 'Eingabedaten zweckgemäß und hinreichend repräsentativ' },
+    titel: {
+      basis: 'Passende Eingabedaten verwenden',
+      standard: 'Eingabedaten prüfen',
+      experte: 'Eingabedaten zweckgemäß und hinreichend repräsentativ',
+    },
     beschreibung: {
-      normal: 'Die Daten, die ihr eingebt, müssen zur Aufgabe passen — soweit ihr das beeinflussen könnt.',
-      specialist:
+      basis: 'Die Daten, die ihr eingebt, müssen zur Aufgabe passen — soweit ihr das beeinflussen könnt.',
+      standard: 'Soweit ihr Kontrolle über die Eingabedaten habt, müssen sie zum Zweck des Systems passen und repräsentativ sein.',
+      experte:
         'Soweit der Betreiber Kontrolle über die Eingabedaten ausübt, müssen diese im Hinblick auf den Zweck des Hochrisiko-KI-Systems relevant und hinreichend repräsentativ sein (Art. 26 Abs. 4).',
     },
     gilt_fuer: ['betreiber'],
@@ -303,10 +323,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'ueberwachung-meldung',
     artikel: 'Art. 26 Abs. 5',
-    titel: { normal: 'Betrieb überwachen und Vorfälle melden', specialist: 'Überwachung, Aussetzung bei Risiko, Meldung' },
+    titel: {
+      basis: 'Betrieb überwachen und Vorfälle melden',
+      standard: 'Betrieb überwachen und melden',
+      experte: 'Überwachung, Aussetzung bei Risiko, Meldung',
+    },
     beschreibung: {
-      normal: 'Beobachtet den Betrieb; wird ein Risiko erkennbar, das System stoppen und Anbieter sowie Marktüberwachungsbehörde informieren.',
-      specialist:
+      basis: 'Beobachtet den Betrieb; wird ein Risiko erkennbar, das System stoppen und Anbieter sowie Marktüberwachungsbehörde informieren.',
+      standard: 'Der Betrieb ist zu überwachen; bei erkennbarem Risiko das System aussetzen und Anbieter sowie Marktüberwachungsbehörde informieren.',
+      experte:
         'Überwachung des Betriebs anhand der Betriebsanleitung; bei Anhaltspunkten für ein Risiko Aussetzung der Nutzung und Information von Anbieter, Vertreiber und Marktüberwachungsbehörde (Art. 26 Abs. 5).',
     },
     gilt_fuer: ['betreiber'],
@@ -317,10 +342,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'log-aufbewahrung',
     artikel: 'Art. 26 Abs. 6',
-    titel: { normal: 'Protokolle mindestens 6 Monate aufbewahren', specialist: 'Aufbewahrung automatisch erzeugter Logs (≥ 6 Monate)' },
+    titel: {
+      basis: 'Protokolle mindestens 6 Monate aufbewahren',
+      standard: 'Protokolle aufbewahren (≥ 6 Monate)',
+      experte: 'Aufbewahrung automatisch erzeugter Logs (≥ 6 Monate)',
+    },
     beschreibung: {
-      normal: 'Bewahrt die automatisch erstellten Protokolle des Systems für mindestens sechs Monate auf.',
-      specialist:
+      basis: 'Bewahrt die automatisch erstellten Protokolle des Systems für mindestens sechs Monate auf.',
+      standard: 'Automatisch erzeugte Protokolle sind mindestens sechs Monate aufzubewahren.',
+      experte:
         'Aufbewahrung der vom Hochrisiko-KI-System automatisch erzeugten Protokolle, soweit sie der Kontrolle des Betreibers unterliegen, für einen der Zweckbestimmung angemessenen Zeitraum von mindestens sechs Monaten (Art. 26 Abs. 6).',
     },
     gilt_fuer: ['betreiber'],
@@ -331,10 +361,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'information-arbeitnehmer',
     artikel: 'Art. 26 Abs. 7',
-    titel: { normal: 'Beschäftigte vorab informieren', specialist: 'Information der Arbeitnehmervertretung vor Inbetriebnahme' },
+    titel: {
+      basis: 'Beschäftigte vorab informieren',
+      standard: 'Beschäftigte informieren',
+      experte: 'Information der Arbeitnehmervertretung vor Inbetriebnahme',
+    },
     beschreibung: {
-      normal: 'Informiert betroffene Mitarbeitende und ihre Vertretung, bevor das System am Arbeitsplatz eingesetzt wird.',
-      specialist:
+      basis: 'Informiert betroffene Mitarbeitende und ihre Vertretung, bevor das System am Arbeitsplatz eingesetzt wird.',
+      standard: 'Beschäftigte und ihre Vertretung sind vor Einsatz des Systems am Arbeitsplatz zu informieren.',
+      experte:
         'Information der Arbeitnehmer und ihrer Vertretung darüber, dass sie am Arbeitsplatz Gegenstand der Verwendung eines Hochrisiko-KI-Systems sein werden, vor Inbetriebnahme (Art. 26 Abs. 7). Nur relevant, sofern der Einsatz am Arbeitsplatz erfolgt.',
     },
     gilt_fuer: ['betreiber'],
@@ -345,10 +380,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'information-betroffene',
     artikel: 'Art. 26 Abs. 11',
-    titel: { normal: 'Betroffene bei wichtigen Entscheidungen informieren', specialist: 'Information bei Entscheidungen mit rechtlicher/vergleichbarer Wirkung' },
+    titel: {
+      basis: 'Betroffene bei wichtigen Entscheidungen informieren',
+      standard: 'Betroffene informieren',
+      experte: 'Information bei Entscheidungen mit rechtlicher/vergleichbarer Wirkung',
+    },
     beschreibung: {
-      normal: 'Trifft die KI eine Entscheidung mit rechtlicher oder ähnlich bedeutsamer Wirkung über eine Person, muss diese informiert werden.',
-      specialist:
+      basis: 'Trifft die KI eine Entscheidung mit rechtlicher oder ähnlich bedeutsamer Wirkung über eine Person, muss diese informiert werden.',
+      standard: 'Personen, über die das System rechtlich bedeutsame Entscheidungen trifft oder wesentlich beeinflusst, sind darüber zu informieren.',
+      experte:
         'Betreiber, die über die Verwendung eines Hochrisiko-KI-Systems entscheiden, das Entscheidungen mit rechtlicher Wirkung oder ähnlich erheblicher Auswirkung auf natürliche Personen trifft oder wesentlich unterstützt, informieren die betroffene Person hierüber (Art. 26 Abs. 11).',
     },
     gilt_fuer: ['betreiber'],
@@ -359,10 +399,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'grundrechte-folgenabschaetzung',
     artikel: 'Art. 27',
-    titel: { normal: 'Grundrechte-Folgenabschätzung (falls betroffen)', specialist: 'Grundrechte-Folgenabschätzung (Art. 27) — bedingte Pflicht' },
+    titel: {
+      basis: 'Grundrechte-Folgenabschätzung (falls betroffen)',
+      standard: 'Grundrechte-Folgenabschätzung prüfen',
+      experte: 'Grundrechte-Folgenabschätzung (Art. 27) — bedingte Pflicht',
+    },
     beschreibung: {
-      normal: 'Bestimmte Betreiber (u. a. Behörden) müssen vorab die Auswirkungen auf Grundrechte bewerten. Prüft, ob das auf euch zutrifft.',
-      specialist:
+      basis: 'Bestimmte Betreiber (u. a. Behörden) müssen vorab die Auswirkungen auf Grundrechte bewerten. Prüft, ob das auf euch zutrifft.',
+      standard: 'Bestimmte Betreiber müssen vor Inbetriebnahme eine Grundrechte-Folgenabschätzung durchführen — prüft, ob das auf euch zutrifft.',
+      experte:
         'Öffentliche Einrichtungen und Betreiber bestimmter in Anhang III genannter Hochrisiko-Systeme (u. a. Kreditwürdigkeitsprüfung, Versicherungsrisiko) müssen vor Inbetriebnahme eine Grundrechte-Folgenabschätzung durchführen (Art. 27). Ob dies zutrifft, hängt vom Betreibertyp ab und muss einzeln geprüft werden.',
     },
     gilt_fuer: ['betreiber'],
@@ -375,10 +420,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'ki-interaktion-offenlegung',
     artikel: 'Art. 50 Abs. 1',
-    titel: { normal: 'Offenlegen, dass eine KI antwortet', specialist: 'Offenlegung der KI-Interaktion' },
+    titel: {
+      basis: 'Offenlegen, dass eine KI antwortet',
+      standard: 'KI-Interaktion offenlegen',
+      experte: 'Offenlegung der KI-Interaktion',
+    },
     beschreibung: {
-      normal: 'Nutzende müssen erkennen können, dass sie mit einem KI-System sprechen, nicht mit einem Menschen.',
-      specialist:
+      basis: 'Nutzende müssen erkennen können, dass sie mit einem KI-System sprechen, nicht mit einem Menschen.',
+      standard: 'Betroffene müssen erkennen können, dass sie mit einem KI-System interagieren (Anbieterpflicht, hier als Kontext ausgewiesen).',
+      experte:
         'Anbieterpflicht: Natürliche Personen müssen darüber informiert werden, dass sie mit einem KI-System interagieren (Art. 50 Abs. 1). Für Betreiber als Kontextinformation ausgewiesen.',
     },
     gilt_fuer: ['anbieter'],
@@ -389,10 +439,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'deepfake-kennzeichnung',
     artikel: 'Art. 50 Abs. 4',
-    titel: { normal: 'Deepfakes kennzeichnen', specialist: 'Kennzeichnung von Deepfakes' },
+    titel: {
+      basis: 'Deepfakes kennzeichnen',
+      standard: 'Deepfakes kennzeichnen',
+      experte: 'Kennzeichnung von Deepfakes',
+    },
     beschreibung: {
-      normal: 'Erzeugt oder verändert ihr mit KI Bilder, Audio oder Video, die wie echte Personen, Orte oder Ereignisse wirken, müsst ihr offenlegen, dass sie künstlich erzeugt sind.',
-      specialist:
+      basis: 'Erzeugt oder verändert ihr mit KI Bilder, Audio oder Video, die wie echte Personen, Orte oder Ereignisse wirken, müsst ihr offenlegen, dass sie künstlich erzeugt sind.',
+      standard: 'KI-generierte oder -veränderte Bild-, Audio- oder Videoinhalte, die einen Deepfake darstellen, müssen als künstlich erzeugt gekennzeichnet werden.',
+      experte:
         'Betreiber eines KI-Systems, das Bild-, Audio- oder Videoinhalte erzeugt oder manipuliert, die einen Deepfake darstellen, legen offen, dass die Inhalte künstlich erzeugt oder manipuliert wurden (Art. 50 Abs. 4 UAbs. 1).',
     },
     gilt_fuer: ['betreiber'],
@@ -403,10 +458,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'text-oeffentliches-interesse-offenlegung',
     artikel: 'Art. 50 Abs. 4',
-    titel: { normal: 'KI-Texte zu öffentlichen Themen kennzeichnen', specialist: 'Offenlegung bei Texten zu Angelegenheiten von öffentlichem Interesse' },
+    titel: {
+      basis: 'KI-Texte zu öffentlichen Themen kennzeichnen',
+      standard: 'Texte zu öffentlichem Interesse kennzeichnen',
+      experte: 'Offenlegung bei Texten zu Angelegenheiten von öffentlichem Interesse',
+    },
     beschreibung: {
-      normal: 'Veröffentlicht ihr KI-generierte Texte zu Themen von öffentlichem Interesse ohne redaktionelle Gegenprüfung durch einen Menschen, müsst ihr das offenlegen.',
-      specialist:
+      basis: 'Veröffentlicht ihr KI-generierte Texte zu Themen von öffentlichem Interesse ohne redaktionelle Gegenprüfung durch einen Menschen, müsst ihr das offenlegen.',
+      standard: 'KI-generierte Texte zu Angelegenheiten von öffentlichem Interesse sind offenzulegen, sofern keine redaktionelle Prüfung durch einen Menschen stattfand.',
+      experte:
         'Betreiber, die einen Text veröffentlichen, der KI-generiert wurde, um die Öffentlichkeit über Angelegenheiten von öffentlichem Interesse zu informieren, legen dies offen — außer eine natürliche Person hat die redaktionelle Verantwortung übernommen und den Inhalt überprüft (Art. 50 Abs. 4 UAbs. 2).',
     },
     gilt_fuer: ['betreiber'],
@@ -417,10 +477,15 @@ const PFLICHTEN_KATALOG: PflichtDefinition[] = [
   {
     id: 'emotionserkennung-information',
     artikel: 'Art. 50 Abs. 3',
-    titel: { normal: 'Betroffene über Emotionserkennung informieren', specialist: 'Information der betroffenen Personen (Emotionserkennung)' },
+    titel: {
+      basis: 'Betroffene über Emotionserkennung informieren',
+      standard: 'Über Emotionserkennung informieren',
+      experte: 'Information der betroffenen Personen (Emotionserkennung)',
+    },
     beschreibung: {
-      normal: 'Erkennt die KI Emotionen oder Absichten, müsst ihr die betroffenen Personen darüber informieren.',
-      specialist:
+      basis: 'Erkennt die KI Emotionen oder Absichten, müsst ihr die betroffenen Personen darüber informieren.',
+      standard: 'Von Emotionserkennung betroffene Personen sind über den Betrieb des Systems zu informieren.',
+      experte:
         'Betreiber eines Systems zur Emotionserkennung oder biometrischen Kategorisierung informieren die davon betroffenen natürlichen Personen über den Betrieb des Systems (Art. 50 Abs. 3).',
     },
     gilt_fuer: ['betreiber'],

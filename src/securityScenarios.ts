@@ -3,8 +3,8 @@ import type { UseCase } from './types'
 export interface SecurityScenario {
   id: string
   titel: string
-  kurzbeschreibung: { normal: string; specialist: string }
-  lehrpunkt: { normal: string; specialist: string } // Warum ist dieser Fall drin?
+  kurzbeschreibung: { basis: string; standard: string; experte: string }
+  lehrpunkt: { basis: string; standard: string; experte: string } // Warum ist dieser Fall drin?
   useCase: UseCase
 }
 
@@ -13,13 +13,16 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'redaktionsassistent',
     titel: 'Redaktionsassistent mit Recherche',
     kurzbeschreibung: {
-      normal: 'Eine KI hilft bei der Recherche für Artikel und darf dafür im Internet suchen.',
-      specialist: 'Recherche-Assistent mit Websuche und Dateizugriff auf unveröffentlichte Inhalte.',
+      basis: 'Eine KI hilft bei der Recherche für Artikel und darf dafür im Internet suchen.',
+      standard: 'Recherche-Assistent mit Websuche-Zugriff — die Websuche selbst ist ein Exfiltrationskanal.',
+      experte: 'Recherche-Assistent mit Websuche und Dateizugriff auf unveröffentlichte Inhalte.',
     },
     lehrpunkt: {
-      normal:
+      basis:
         'Sieht harmlos aus, erfüllt aber alle drei Bedingungen der gefährlichen Kombination — weil die Websuche selbst ein Weg nach außen ist.',
-      specialist:
+      standard:
+        'Alle drei Trifecta-Bedingungen erfüllt: vertrauliche Daten, externe Inhalte und Websuche als Weg nach außen.',
+      experte:
         'Trifecta über websuche als Exfiltrationskanal; Datenzugriff auf unveröffentlichte Beiträge; zusätzlich Art. 50 Abs. 4 bei Texten zu Angelegenheiten von öffentlichem Interesse.',
     },
     useCase: {
@@ -45,13 +48,16 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'support-bot',
     titel: 'Zuschauer-Support-Bot',
     kurzbeschreibung: {
-      normal: 'Ein Chatbot beantwortet Fragen von Zuschauer:innen automatisch und selbstständig.',
-      specialist: 'Autonomer Support-Bot mit Datenbankzugriff, externer API-Anbindung und aktivem Exfiltrationskanal.',
+      basis: 'Ein Chatbot beantwortet Fragen von Zuschauer:innen automatisch und selbstständig.',
+      standard: 'Autonomer Support-Bot mit Datenbankzugriff und externem API-Kanal bei 500.000 Betroffenen.',
+      experte: 'Autonomer Support-Bot mit Datenbankzugriff, externer API-Anbindung und aktivem Exfiltrationskanal.',
     },
     lehrpunkt: {
-      normal:
+      basis:
         'Ein Support-Bot wirkt harmlos — hier kommen aber alle drei Zutaten der gefährlichen Kombination zusammen, bei einer halben Million Betroffener und ohne dass ein Mensch zwischen KI und Aktion steht.',
-      specialist:
+      standard:
+        'Trifecta erfüllt und hohe Reichweite — trotzdem nur Transparenzpflicht, da Support keine Hochrisiko-Kategorie ist.',
+      experte:
         'Trifecta über externeKommunikation und api_extern erfüllt; zusätzlich LLM08 (Datenbankzugriff + untrusted Input) und LLM10 (Reichweite > 100.000). AI Act: Transparenzpflicht nach Art. 50 Abs. 1 — keine Hochrisiko-Einstufung, da Support keine Anhang-III-Kategorie ist, trotz autonomer Handlungsmacht.',
     },
     useCase: {
@@ -77,13 +83,16 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'bewerbung-autonom',
     titel: 'Bewerbungs-Vorauswahl (autonom)',
     kurzbeschreibung: {
-      normal: 'Eine KI wählt selbstständig aus, welche Bewerbungen weiterkommen.',
-      specialist: 'Autonome Bewerbungsvorauswahl mit Dateizugriff auf Bewerbungsunterlagen.',
+      basis: 'Eine KI wählt selbstständig aus, welche Bewerbungen weiterkommen.',
+      standard: 'Autonome Bewerbungsvorauswahl — die KI entscheidet ohne menschliche Rückfrage.',
+      experte: 'Autonome Bewerbungsvorauswahl mit Dateizugriff auf Bewerbungsunterlagen.',
     },
     lehrpunkt: {
-      normal:
+      basis:
         'Die KI entscheidet hier ohne Rückfrage mit, wer eine Chance bekommt — genau das macht automatisierte Bewerbungsauswahl zu einem besonders geregelten Fall.',
-      specialist:
+      standard:
+        'Hochrisiko nach Anhang III Nr. 4; autonome Entscheidung schließt die Ausnahme nach Art. 6 Abs. 3 aus.',
+      experte:
         'Anhang III Nr. 4 (Beschäftigung); autonome Handlungsmacht schließt die Ausnahme nach Art. 6 Abs. 3 aus. Vergleiche Fall 4 (nur Vorschlag) — der Unterschied in genau einem Feld ändert die Einordnung fundamental.',
     },
     useCase: {
@@ -109,13 +118,16 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'bewerbung-vorschlag',
     titel: 'Bewerbungs-Screening (nur Vorschlag)',
     kurzbeschreibung: {
-      normal: 'Eine KI schlägt eine Reihenfolge vor, ein Mensch entscheidet.',
-      specialist: 'Screening mit reiner Vorschlagsfunktion, identische Datenbasis wie Fall 3.',
+      basis: 'Eine KI schlägt eine Reihenfolge vor, ein Mensch entscheidet.',
+      standard: 'Bewerbungs-Screening mit reiner Vorschlagsfunktion — identische Daten wie Fall 3.',
+      experte: 'Screening mit reiner Vorschlagsfunktion, identische Datenbasis wie Fall 3.',
     },
     lehrpunkt: {
-      normal:
+      basis:
         'Der einzige Unterschied zum vorherigen Fall: Hier schlägt die KI nur vor, ein Mensch entscheidet. Das kann die rechtliche Einordnung erheblich verändern — aber nur, wenn die KI dabei kein Persönlichkeitsprofil der Bewerbenden erstellt.',
-      specialist:
+      standard:
+        'Ein Feld (autonomie) unterscheidet sich von Fall 3 — das Ergebnis kippt von Hochrisiko zu Grenzfall.',
+      experte:
         'Der Unterschied zu Fall 3 ist ein einziges Feld — und die rechtliche Einordnung ändert sich fundamental. Ob die Ausnahme nach Art. 6 Abs. 3 wirklich greift, hängt daran, ob Profiling stattfindet.',
     },
     useCase: {
@@ -141,13 +153,16 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'untertitelung',
     titel: 'Untertitelung & Synchronisation',
     kurzbeschreibung: {
-      normal: 'Eine KI übersetzt und vertont Sendungen für ein großes Publikum.',
-      specialist: 'Self-hosted Untertitel-/Synchronisationspipeline ohne externe Kommunikation.',
+      basis: 'Eine KI übersetzt und vertont Sendungen für ein großes Publikum.',
+      standard: 'Self-hosted Untertitel-Pipeline für ein großes Publikum, keine externe Kommunikation.',
+      experte: 'Self-hosted Untertitel-/Synchronisationspipeline ohne externe Kommunikation.',
     },
     lehrpunkt: {
-      normal:
+      basis:
         'Viele Zuschauer:innen bedeuten nicht automatisch hohes Risiko: Weil die Daten intern bleiben und alles selbst betrieben wird, bleibt dieser Fall im grünen Bereich — kennzeichnungspflichtig ist er trotzdem, weil Inhalte veröffentlicht werden.',
-      specialist:
+      standard:
+        'Hohe Reichweite treibt das Risiko nicht automatisch hoch, wenn Datenkontrolle und Deployment sauber sind.',
+      experte:
         'Hohe Reichweite (Faktor nahe 1.0) bei self-hosted Deployment und interner Datenklasse ergibt Exposure-Stufe B trotz Art.-50-Transparenzpflicht — Reichweite allein treibt den Risikowert nicht in den kritischen Bereich, wenn Datenkontrolle und Deployment sauber sind.',
     },
     useCase: {
@@ -173,13 +188,16 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'ki-stimme',
     titel: 'KI-Stimme für Werbespot',
     kurzbeschreibung: {
-      normal: 'Eine KI erzeugt eine künstliche Stimme für einen Werbespot.',
-      specialist: 'Voice-Synthesis für Werbeinhalte über einen SaaS-US-Dienst.',
+      basis: 'Eine KI erzeugt eine künstliche Stimme für einen Werbespot.',
+      standard: 'Synthetische Werbestimme über einen SaaS-US-Dienst, eine Million Hörer:innen.',
+      experte: 'Voice-Synthesis für Werbeinhalte über einen SaaS-US-Dienst.',
     },
     lehrpunkt: {
-      normal:
+      basis:
         'Eine künstliche Stimme fällt unter die Deepfake-Kennzeichnungspflicht — auch wenn niemand täuschen will. Das Risiko bleibt trotz einer Million Hörer:innen im mittleren, nicht roten Bereich.',
-      specialist:
+      standard:
+        'Synthetische Audioinhalte lösen die Deepfake-Kennzeichnungspflicht aus — unabhängig von der Absicht.',
+      experte:
         'Synthetische Audioinhalte lösen die Deepfake-Kennzeichnungspflicht (Art. 50 Abs. 4 UAbs. 1) aus. Trotz betroffene = 1.000.000 (Reichweite-Faktor 1.0) bleibt der Exposure-Risikowert bei Stufe C, da keine Trifecta-Bedingung erfüllt ist und Autonomie/Deployment moderat bleiben.',
     },
     useCase: {
@@ -205,13 +223,16 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'meeting-zusammenfassung',
     titel: 'Meeting-Zusammenfassung',
     kurzbeschreibung: {
-      normal: 'Eine KI fasst interne Besprechungen zusammen.',
-      specialist: 'Self-hosted Meeting-Summary mit reiner Vorschlagsfunktion, kleiner Betroffenenkreis.',
+      basis: 'Eine KI fasst interne Besprechungen zusammen.',
+      standard: 'Self-hosted Meeting-Zusammenfassung, reine Vorschlagsfunktion, kleiner Kreis.',
+      experte: 'Self-hosted Meeting-Summary mit reiner Vorschlagsfunktion, kleiner Betroffenenkreis.',
     },
     lehrpunkt: {
-      normal:
+      basis:
         'Nicht jeder KI-Einsatz ist kritisch. Dieser Fall zeigt, wie ein unproblematisches Setup aussieht: kleiner Kreis, interne Daten, ein Mensch behält die Kontrolle.',
-      specialist:
+      standard:
+        'Minimal-Klasse und niedriges Risiko — ein Beispiel für einen unkritischen Use-Case.',
+      experte:
         'Minimal-Klasse im AI Act (keine Anhang-III-Kategorie, keine Transparenzpflicht ausgelöst) und Exposure-Stufe B — ein Beispiel für einen Use-Case ohne besonderen Regelungsbedarf über Art. 4 hinaus.',
     },
     useCase: {
@@ -237,12 +258,15 @@ export const securityScenarios: SecurityScenario[] = [
     id: 'emotionsanalyse-bewerbung',
     titel: 'Emotionsanalyse in Bewerbungsgesprächen',
     kurzbeschreibung: {
-      normal: 'Eine KI wertet die Gefühle von Bewerbenden im Gespräch aus.',
-      specialist: 'Autonome Emotionserkennung im Beschäftigungskontext, besondere Kategorien personenbezogener Daten.',
+      basis: 'Eine KI wertet die Gefühle von Bewerbenden im Gespräch aus.',
+      standard: 'Autonome Emotionserkennung im Bewerbungsgespräch — besondere Kategorien personenbezogener Daten.',
+      experte: 'Autonome Emotionserkennung im Beschäftigungskontext, besondere Kategorien personenbezogener Daten.',
     },
     lehrpunkt: {
-      normal: 'Dieser Einsatz ist in der EU nicht erlaubt — unabhängig davon, wie gut er technisch abgesichert wäre.',
-      specialist:
+      basis: 'Dieser Einsatz ist in der EU nicht erlaubt — unabhängig davon, wie gut er technisch abgesichert wäre.',
+      standard:
+        'Verboten nach Art. 5 Abs. 1 lit. f — unabhängig von technischer Absicherung oder Exposure-Stufe.',
+      experte:
         'Art. 5 Abs. 1 lit. f (Emotionserkennung am Arbeitsplatz) — Verbotstatbestand, terminal. Die Exposure-Bewertung (Stufe D, keine Trifecta) ist hier irrelevant: Ein technisch gut abgesichertes verbotenes System bleibt verboten.',
     },
     useCase: {

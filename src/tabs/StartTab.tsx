@@ -1,4 +1,4 @@
-import { useViewMode } from '../ViewModeContext'
+import { useViewMode, type ViewMode } from '../ViewModeContext'
 import heroStart from '../assets/hero-start.jpg'
 import injectionImg from '../assets/injection.jpg'
 import trifectaImg from '../assets/trifecta.jpg'
@@ -9,10 +9,41 @@ interface StartTabProps {
   onNavigate?: (tab: TabKey) => void
 }
 
+const HERO_TEXT: Record<ViewMode, { eyebrow: string; titel: string }> = {
+  basis: {
+    eyebrow: 'Was ist AI Security?',
+    titel: 'Fünf Dinge, die ihr wissen solltet, bevor ihr einen KI-Einsatz plant',
+  },
+  standard: {
+    eyebrow: 'Kurzüberblick',
+    titel: 'Was ihr über KI-Sicherheit und den AI Act wissen solltet',
+  },
+  experte: {
+    eyebrow: 'Übersicht',
+    titel: 'Was dieses Tool berechnet — und was nicht',
+  },
+}
+
 export function StartTab({ onNavigate }: StartTabProps) {
   const { mode } = useViewMode()
+  const heroText = HERO_TEXT[mode]
 
-  return mode === 'experte' ? <SpecialistUebersicht onNavigate={onNavigate} /> : <NormalEinfuehrung onNavigate={onNavigate} />
+  return (
+    <div className="start-shell">
+      <section className="panel hero-card">
+        <HeroMedia compact={mode === 'experte'} />
+        <p className="eyebrow">{heroText.eyebrow}</p>
+        <h2>{heroText.titel}</h2>
+      </section>
+
+      <ZweckBlock />
+      <WasNichtBlock />
+
+      {mode === 'basis' && <BasisInhalte onNavigate={onNavigate} />}
+      {mode === 'standard' && <StandardInhalte onNavigate={onNavigate} />}
+      {mode === 'experte' && <ExperteInhalte onNavigate={onNavigate} />}
+    </div>
+  )
 }
 
 function HeroMedia({ compact }: { compact: boolean }) {
@@ -26,15 +57,36 @@ function HeroMedia({ compact }: { compact: boolean }) {
   )
 }
 
-function NormalEinfuehrung({ onNavigate }: StartTabProps) {
+function ZweckBlock() {
   return (
-    <div className="start-shell">
-      <section className="panel hero-card">
-        <HeroMedia compact={false} />
-        <p className="eyebrow">Was ist AI Security?</p>
-        <h2>Fünf Dinge, die ihr wissen solltet, bevor ihr einen KI-Einsatz plant</h2>
-      </section>
+    <section className="panel start-zweck">
+      <p>
+        Der AI-Security-Score hilft dir einzuschätzen, wie riskant ein geplanter KI-Einsatz ist und welche Regeln
+        nach dem EU AI Act dafür gelten. Er ist ein Ausgangspunkt für das Gespräch mit dem AI Security Chapter —
+        keine abschließende Bewertung.
+      </p>
+    </section>
+  )
+}
 
+function WasNichtBlock() {
+  return (
+    <section className="panel start-was-nicht">
+      <h3>Was dieses Tool nicht ist</h3>
+      <ul>
+        <li>Es ist kein Sicherheits-Assessment und kein Penetrationstest.</li>
+        <li>Es ist keine Rechtsberatung. Die AI-Act-Einordnung ist vorläufig.</li>
+        <li>Es ist kein Freibrief: Ein grünes Ergebnis heißt nicht „unbedenklich".</li>
+        <li>Es prüft keine echten Systeme, sondern nur deine Angaben.</li>
+        <li>Die Bewertungen sind Heuristiken mit gesetzten Gewichten, nicht empirisch validiert.</li>
+      </ul>
+    </section>
+  )
+}
+
+function BasisInhalte({ onNavigate }: StartTabProps) {
+  return (
+    <>
       <section className="panel">
         <h3>1. Worum es hier geht</h3>
         <p>
@@ -99,19 +151,89 @@ function NormalEinfuehrung({ onNavigate }: StartTabProps) {
           Use-Case prüfen
         </button>
       </section>
-    </div>
+    </>
   )
 }
 
-function SpecialistUebersicht({ onNavigate }: StartTabProps) {
+function StandardInhalte({ onNavigate }: StartTabProps) {
   return (
-    <div className="start-shell">
-      <section className="panel hero-card">
-        <HeroMedia compact={true} />
-        <p className="eyebrow">Übersicht</p>
-        <h2>Was dieses Tool berechnet — und was nicht</h2>
+    <>
+      <section className="panel">
+        <h3>1. Worum es hier geht</h3>
+        <p>
+          Der Score schätzt Risiko und regulatorische Einordnung eures KI-Einsatzes anhand weniger Angaben im
+          Use-Case-Tab — als Ausgangspunkt, nicht als abschließende Prüfung.
+        </p>
       </section>
 
+      <section className="panel">
+        <h3>2. Prompt Injection</h3>
+        <div className="start-inline-section">
+          <p>
+            Verarbeitet die KI fremde Inhalte, können darin versteckte Anweisungen stecken (Prompt Injection) — sie
+            unterscheidet nicht zuverlässig zwischen Anweisung und Inhalt.
+          </p>
+          <img src={injectionImg} alt="" className="inline-bild" loading="lazy" />
+        </div>
+      </section>
+
+      <section className="panel">
+        <h3>3. Die gefährliche Dreier-Kombination</h3>
+        <div className="start-inline-section">
+          <img src={trifectaImg} alt="" className="inline-bild" loading="lazy" />
+          <p>
+            Vertrauliche Daten, fremde Inhalte und ein Weg nach außen ermöglichen zusammen unbemerkte Exfiltration
+            — jede Zutat für sich ist unkritisch.
+          </p>
+        </div>
+      </section>
+
+      <section className="panel">
+        <h3>4. Was mit euren Eingaben passiert</h3>
+        <p>
+          Ohne Vertrag (private, kostenlose Zugänge) müsst ihr davon ausgehen, dass Eingaben zu Trainingszwecken
+          gespeichert werden.
+        </p>
+      </section>
+
+      <section className="panel">
+        <h3>5. Wann ihr fragen solltet</h3>
+        <p>
+          Bei personenbezogenen Daten, Entscheidungen über Menschen, autonomer Handlung, öffentlichen Inhalten
+          oder externen Inhalten: AI Security Chapter einbinden.
+        </p>
+      </section>
+
+      <section className="panel">
+        <div className="panel-heading">
+          <h2>Vertiefen</h2>
+          <p>Drei Auswertungen für euren konkreten Use-Case:</p>
+        </div>
+        <div className="action-row">
+          <button type="button" className="demo-card demo-card-good" onClick={() => onNavigate?.('exposure')}>
+            Risiko
+          </button>
+          <button type="button" className="demo-card demo-card-bad" onClick={() => onNavigate?.('compliance')}>
+            Pflichten
+          </button>
+          <button type="button" className="demo-card" onClick={() => onNavigate?.('bibliothek')}>
+            Bibliothek
+          </button>
+        </div>
+      </section>
+
+      <section className="panel start-cta">
+        <button type="button" className="demo-card-good" onClick={() => onNavigate?.('usecase')}>
+          Use-Case prüfen
+        </button>
+      </section>
+    </>
+  )
+}
+
+function ExperteInhalte({ onNavigate }: StartTabProps) {
+  return (
+    <>
       <section className="panel">
         <div className="start-uebersicht-grid">
           <div>
@@ -147,6 +269,6 @@ function SpecialistUebersicht({ onNavigate }: StartTabProps) {
           Zur Methodik →
         </button>
       </section>
-    </div>
+    </>
   )
 }

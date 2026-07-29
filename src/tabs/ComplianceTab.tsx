@@ -25,11 +25,10 @@ const KLASSE_LABEL: Record<AiActKlasse, string> = {
   grenzfall: 'Grenzfall',
 }
 
-const KLASSE_TEXT_NORMAL: Record<Exclude<AiActKlasse, 'grenzfall'>, { titel: string; erklaerung: string }> = {
+const KLASSE_TEXT: Record<Exclude<AiActKlasse, 'grenzfall'>, { titel: string; erklaerung: string }> = {
   verboten: {
     titel: 'Nicht zulässig',
-    erklaerung:
-      'Dieser Anwendungsfall fällt unter eine verbotene Praxis nach dem AI Act. Er darf in dieser Form nicht eingesetzt werden.',
+    erklaerung: 'Dieser Einsatz ist nach EU-Recht nicht erlaubt — unabhängig von Pflichten oder technischer Absicherung.',
   },
   hochrisiko: {
     titel: 'Hochrisiko-System',
@@ -91,7 +90,9 @@ export function ComplianceTab({ useCase, onChange }: ComplianceTabProps) {
   return (
     <div className="compliance-shell">
       {(mode === 'basis' || mode === 'standard') && <img src={bannerCompliance} alt="" className="tab-banner" loading="lazy" />}
-      {mode === 'experte' ? (
+      {mode === 'basis' && <PflichtenAnsicht ergebnis={ergebnis} detailLevel="basis" />}
+      {mode === 'standard' && <PflichtenAnsicht ergebnis={ergebnis} detailLevel="standard" />}
+      {mode === 'experte' && (
         <SpecialistAnsicht
           ergebnis={ergebnis}
           rolle={rolle}
@@ -99,36 +100,30 @@ export function ComplianceTab({ useCase, onChange }: ComplianceTabProps) {
           onToggleKontrolle={toggleKontrolle}
           istZutreffendBestaetigt={istZutreffendBestaetigt}
         />
-      ) : (
-        <NormalAnsicht ergebnis={ergebnis} onToggleKontrolle={toggleKontrolle} />
       )}
       <Disclaimer ausfuehrlich={mode === 'experte'} />
     </div>
   )
 }
 
-function NormalAnsicht({
-  ergebnis,
-  onToggleKontrolle,
-}: {
-  ergebnis: AiActErgebnis
-  onToggleKontrolle: (id: string) => void
-}) {
+// Basis und Standard teilen sich dieselbe Struktur (Klasse-Panel + Pflichten
+// als Klartext-Liste) und unterscheiden sich nur im Detailgrad pro Pflicht —
+// kein Erfüllungsgrad-Balken, keine Checkbox, kein Rollen-Umschalter. Ein
+// Balken würde suggerieren, dass hier jemand Pflichten abgearbeitet hat;
+// tatsächlich lernt die Person gerade erst, DASS es sie gibt.
+function PflichtenAnsicht({ ergebnis, detailLevel }: { ergebnis: AiActErgebnis; detailLevel: 'basis' | 'standard' }) {
   const [glossarOpen, setGlossarOpen] = useState(false)
   const istGrenzfall = ergebnis.primaerklasse === 'grenzfall'
-  const klasseText = !istGrenzfall ? KLASSE_TEXT_NORMAL[ergebnis.primaerklasse as Exclude<AiActKlasse, 'grenzfall'>] : null
-
-  const handlungsPflichten = ergebnis.pflichten.filter((p) => !p.bedingt).slice(0, 5)
-  const fortschritt = ergebnis.erfuellungsgrad
-  const artikelListe = Array.from(new Set(ergebnis.begruendungen.map((b) => b.artikel)))
+  const istVerboten = ergebnis.primaerklasse === 'verboten'
+  const klasseText = !istGrenzfall ? KLASSE_TEXT[ergebnis.primaerklasse as Exclude<AiActKlasse, 'grenzfall'>] : null
 
   return (
     <>
       <section className={`panel compliance-klasse-panel compliance-klasse-${ergebnis.primaerklasse}`}>
         {istGrenzfall ? (
           <>
-            <h2>Unklar — juristisch prüfen</h2>
-            <p>Dieser Anwendungsfall lässt sich anhand der Angaben nicht eindeutig einordnen. Das hängt von Details ab, die eine rechtliche Prüfung braucht.</p>
+            <h2>Unklar — Einzelfallprüfung nötig</h2>
+            <p>Dieser Anwendungsfall lässt sich anhand der Angaben nicht eindeutig einordnen.</p>
             {ergebnis.unschaerfe.map((u) => (
               <p key={u.grund} className="compliance-unschaerfe-hinweis">
                 {u.grund} — {u.empfehlung}
@@ -139,42 +134,33 @@ function NormalAnsicht({
           <>
             <h2>{klasseText?.titel}</h2>
             <p>{klasseText?.erklaerung}</p>
-            {ergebnis.unschaerfe.length > 0 && (
-              <p className="compliance-teilweise-unklar">
-                Teilweise unklar: {ergebnis.unschaerfe.map((u) => u.grund).join('; ')}.
-              </p>
-            )}
           </>
         )}
-        {artikelListe.length > 0 && <p className="compliance-artikel-zusatz">{artikelListe.join(' · ')}</p>}
       </section>
 
-      {ergebnis.primaerklasse !== 'verboten' && (
+      {istVerboten && (
+        <section className="panel compliance-verboten-hinweis">
+          <h2>Dieser Einsatz ist nicht erlaubt</h2>
+          <p>Der AI Act verbietet diese Praxis — der Einsatz ist zu unterlassen.</p>
+        </section>
+      )}
+
+      {!istVerboten && (
         <section className="panel">
           <div className="panel-heading">
-            <h2>Was zu tun ist</h2>
-            {fortschritt !== null && <p>{Math.round(fortschritt * 100)} % erledigt</p>}
+            <h2>Für diesen Fall gelten diese Pflichten</h2>
           </div>
-          {fortschritt !== null && (
-            <div className="compliance-fortschritt-bar" aria-label={`Fortschritt ${Math.round(fortschritt * 100)}%`}>
-              <div className="compliance-fortschritt-fill" style={{ width: `${Math.round(fortschritt * 100)}%` }} />
-            </div>
+          {detailLevel === 'standard' && (
+            <p className="helper-note">Diese Einschätzung geht von der Rolle Betreiber aus.</p>
           )}
-          {handlungsPflichten.length === 0 ? (
-            <p className="helper-note">Keine weiteren Pflichten über die KI-Kompetenz hinaus.</p>
-          ) : (
-            <ul className="compliance-checkliste">
-              {handlungsPflichten.map((p) => (
-                <li key={p.id}>
-                  <label className="choice-option">
-                    <input type="checkbox" checked={p.erfuellt} onChange={() => onToggleKontrolle(p.id)} />
-                    <span>{p.titel.normal}</span>
-                  </label>
-                  <p className="compliance-pflicht-beschreibung">{p.beschreibung.normal}</p>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ul className="compliance-pflichten-liste-klartext">
+            {ergebnis.pflichten.map((p) => (
+              <li key={p.id}>
+                <p>{p.beschreibung[detailLevel]}</p>
+                {detailLevel === 'standard' && <span className="compliance-artikel-klein">{p.artikel}</span>}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
@@ -280,10 +266,10 @@ function SpecialistAnsicht({
               <li key={p.id}>
                 <div className="compliance-pflicht-head">
                   <strong>{p.artikel}</strong>
-                  <span>{p.titel.specialist}</span>
+                  <span>{p.titel.experte}</span>
                   {p.bedingt && <span className="compliance-bedingt-badge">bedingt — zählt nur, wenn als zutreffend bestätigt</span>}
                 </div>
-                <p>{p.beschreibung.specialist}</p>
+                <p>{p.beschreibung.experte}</p>
                 <label className="choice-option">
                   <input type="checkbox" checked={p.erfuellt} onChange={() => onToggleKontrolle(p.id)} />
                   <span>Erfüllt</span>

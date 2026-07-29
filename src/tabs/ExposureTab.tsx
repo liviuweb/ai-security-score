@@ -26,6 +26,16 @@ const WIRKSAMKEIT_LABEL: Record<string, string> = {
   ergaenzend: 'Ergänzende Maßnahme',
 }
 
+// Alltagssprachliche Benennung der Faktoren für den Standard-Modus — Fachbegriff
+// bleibt in Klammern erhalten, damit der Anschluss an Experte-Modus/Methodik nicht abreißt.
+const FAKTOR_STANDARD_NAME: Record<string, string> = {
+  daten: 'Art der Daten (Datenrisiko)',
+  tools: 'Eingesetzte Werkzeuge (Tool-Risiko)',
+  autonomie: 'Handlungsspielraum der KI (Autonomie-Risiko)',
+  deployment: 'Betriebsart (Deployment-Risiko)',
+  reichweite: 'Anzahl Betroffener (Reichweite)',
+}
+
 const GLOSSAR: Array<{ begriff: string; erklaerung: string }> = [
   {
     begriff: 'Prompt Injection',
@@ -55,19 +65,80 @@ export function ExposureTab({ useCase }: ExposureTabProps) {
   return (
     <div className="exposure-shell">
       {(mode === 'basis' || mode === 'standard') && <img src={bannerExposure} alt="" className="tab-banner" loading="lazy" />}
-      {mode === 'experte' ? (
-        <SpecialistAnsicht ergebnis={ergebnis} useCase={useCase} />
-      ) : (
-        <NormalAnsicht ergebnis={ergebnis} />
-      )}
+      {mode === 'basis' && <BasisAnsicht ergebnis={ergebnis} />}
+      {mode === 'standard' && <StandardAnsicht ergebnis={ergebnis} />}
+      {mode === 'experte' && <SpecialistAnsicht ergebnis={ergebnis} useCase={useCase} />}
       <Disclaimer ausfuehrlich={mode === 'experte'} />
     </div>
   )
 }
 
-function NormalAnsicht({ ergebnis }: { ergebnis: ExposureErgebnis }) {
+function TrifectaPanel({ trifecta }: { trifecta: ExposureErgebnis['trifecta'] }) {
+  return (
+    <section className="panel exposure-trifecta-panel">
+      <h2>Gefährliche Kombination erkannt</h2>
+      <p>
+        Die KI liest Inhalte, die von außen kommen. In solchen Inhalten können versteckte Anweisungen stehen
+        (<AbbrGlossar begriff="Prompt Injection" />). Die KI hat gleichzeitig Zugriff auf vertrauliche Daten
+        und einen Weg, Daten nach außen zu schicken. Damit kann jemand von außen die KI dazu bringen, eure
+        Daten zu verschicken (<AbbrGlossar begriff="Exfiltration" />) — ohne dass jemand bei euch etwas davon
+        merkt.
+      </p>
+      <ul className="exposure-trifecta-liste">
+        <li className={trifecta.privateDaten ? 'erfuellt' : 'nicht-erfuellt'}>
+          {trifecta.privateDaten ? '✓' : '–'} Zugriff auf vertrauliche oder personenbezogene Daten
+        </li>
+        <li className={trifecta.untrusted ? 'erfuellt' : 'nicht-erfuellt'}>
+          {trifecta.untrusted ? '✓' : '–'} Verarbeitet Inhalte von außen
+        </li>
+        <li className={trifecta.exfiltration ? 'erfuellt' : 'nicht-erfuellt'}>
+          {trifecta.exfiltration ? '✓' : '–'} Hat einen Weg, Daten nach außen zu schicken
+        </li>
+      </ul>
+    </section>
+  )
+}
+
+function HoheMassnahmenListe({ massnahmen }: { massnahmen: ExposureErgebnis['massnahmen'] }) {
+  const hoheMassnahmen = massnahmen.filter((m) => m.wirksamkeit === 'hoch')
+  if (hoheMassnahmen.length === 0) return null
+
+  return (
+    <section className="panel">
+      <div className="panel-heading">
+        <h2>Was zu tun ist</h2>
+      </div>
+      <ol className="exposure-massnahmen-liste">
+        {hoheMassnahmen.map((m) => (
+          <li key={m.id}>{m.normal}</li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+function GlossarPanel({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+  return (
+    <section className="panel exposure-glossar">
+      <button type="button" className="inline-link" onClick={onToggle} aria-expanded={open}>
+        Begriffe erklärt {open ? '↑' : '↓'}
+      </button>
+      {open && (
+        <dl>
+          {GLOSSAR.map((eintrag) => (
+            <div key={eintrag.begriff} className="exposure-glossar-eintrag">
+              <dt>{eintrag.begriff}</dt>
+              <dd>{eintrag.erklaerung}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </section>
+  )
+}
+
+function BasisAnsicht({ ergebnis }: { ergebnis: ExposureErgebnis }) {
   const [glossarOpen, setGlossarOpen] = useState(false)
-  const hoheMassnahmen = ergebnis.massnahmen.filter((m) => m.wirksamkeit === 'hoch')
 
   return (
     <>
@@ -79,63 +150,65 @@ function NormalAnsicht({ ergebnis }: { ergebnis: ExposureErgebnis }) {
         </div>
       </section>
 
-      {ergebnis.trifecta.erfuellt && (
-        <section className="panel exposure-trifecta-panel">
-          <h2>Gefährliche Kombination erkannt</h2>
-          <p>
-            Die KI liest Inhalte, die von außen kommen. In solchen Inhalten können versteckte Anweisungen stehen
-            (<AbbrGlossar begriff="Prompt Injection" />). Die KI hat gleichzeitig Zugriff auf vertrauliche Daten
-            und einen Weg, Daten nach außen zu schicken. Damit kann jemand von außen die KI dazu bringen, eure
-            Daten zu verschicken (<AbbrGlossar begriff="Exfiltration" />) — ohne dass jemand bei euch etwas davon
-            merkt.
+      {ergebnis.trifecta.erfuellt && <TrifectaPanel trifecta={ergebnis.trifecta} />}
+
+      <HoheMassnahmenListe massnahmen={ergebnis.massnahmen} />
+
+      <GlossarPanel open={glossarOpen} onToggle={() => setGlossarOpen((v) => !v)} />
+    </>
+  )
+}
+
+function StandardAnsicht({ ergebnis }: { ergebnis: ExposureErgebnis }) {
+  const [glossarOpen, setGlossarOpen] = useState(false)
+  const topFaktoren = [...ergebnis.faktoren].sort((a, b) => b.beitrag - a.beitrag).slice(0, 3)
+
+  return (
+    <>
+      <section className="panel exposure-ampel-panel">
+        <div className={`exposure-ampel-large exposure-ampel-${ergebnis.ampel}`} aria-hidden="true" />
+        <div>
+          <p className="exposure-ampel-label">
+            {AMPEL_LABEL[ergebnis.ampel]} · Stufe {ergebnis.stufe}
           </p>
-          <ul className="exposure-trifecta-liste">
-            <li className={ergebnis.trifecta.privateDaten ? 'erfuellt' : 'nicht-erfuellt'}>
-              {ergebnis.trifecta.privateDaten ? '✓' : '–'} Zugriff auf vertrauliche oder personenbezogene Daten
-            </li>
-            <li className={ergebnis.trifecta.untrusted ? 'erfuellt' : 'nicht-erfuellt'}>
-              {ergebnis.trifecta.untrusted ? '✓' : '–'} Verarbeitet Inhalte von außen
-            </li>
-            <li className={ergebnis.trifecta.exfiltration ? 'erfuellt' : 'nicht-erfuellt'}>
-              {ergebnis.trifecta.exfiltration ? '✓' : '–'} Hat einen Weg, Daten nach außen zu schicken
-            </li>
+          <p>{AMPEL_SATZ[ergebnis.ampel]}</p>
+        </div>
+      </section>
+
+      {ergebnis.trifecta.erfuellt && <TrifectaPanel trifecta={ergebnis.trifecta} />}
+
+      <section className="panel">
+        <div className="panel-heading">
+          <h2>Was das Risiko treibt</h2>
+          <p>Die Merkmale mit dem größten Einfluss auf die Einstufung, ohne die volle Rechnung dahinter.</p>
+        </div>
+        <ul className="exposure-faktoren-liste-standard">
+          {topFaktoren.map((faktor) => (
+            <li key={faktor.id}>{FAKTOR_STANDARD_NAME[faktor.id] ?? faktor.label}</li>
+          ))}
+        </ul>
+      </section>
+
+      {ergebnis.owasp.length > 0 && (
+        <section className="panel">
+          <div className="panel-heading">
+            <h2>Erkannte Risikomuster</h2>
+            <p>Eingeordnet nach OWASP Top 10 for LLM Applications 2025.</p>
+          </div>
+          <ul className="exposure-owasp-liste-standard">
+            {ergebnis.owasp.map((treffer) => (
+              <li key={treffer.id}>
+                <strong>{treffer.titel}</strong>
+                <p>{treffer.begruendung}</p>
+              </li>
+            ))}
           </ul>
         </section>
       )}
 
-      {hoheMassnahmen.length > 0 && (
-        <section className="panel">
-          <div className="panel-heading">
-            <h2>Was zu tun ist</h2>
-          </div>
-          <ol className="exposure-massnahmen-liste">
-            {hoheMassnahmen.map((m) => (
-              <li key={m.id}>{m.normal}</li>
-            ))}
-          </ol>
-        </section>
-      )}
+      <HoheMassnahmenListe massnahmen={ergebnis.massnahmen} />
 
-      <section className="panel exposure-glossar">
-        <button
-          type="button"
-          className="inline-link"
-          onClick={() => setGlossarOpen((v) => !v)}
-          aria-expanded={glossarOpen}
-        >
-          Begriffe erklärt {glossarOpen ? '↑' : '↓'}
-        </button>
-        {glossarOpen && (
-          <dl>
-            {GLOSSAR.map((eintrag) => (
-              <div key={eintrag.begriff} className="exposure-glossar-eintrag">
-                <dt>{eintrag.begriff}</dt>
-                <dd>{eintrag.erklaerung}</dd>
-              </div>
-            ))}
-          </dl>
-        )}
-      </section>
+      <GlossarPanel open={glossarOpen} onToggle={() => setGlossarOpen((v) => !v)} />
     </>
   )
 }
@@ -308,8 +381,8 @@ function SpecialistAnsicht({ ergebnis, useCase }: { ergebnis: ExposureErgebnis; 
 
       <section className="panel">
         <p className="helper-note">
-          Hinweis: <strong>Biometrisch</strong> und <strong>Emotionserkennung</strong> sind Felder, die im
-          Normal-Modus nicht angezeigt werden. Ohne einen Wechsel in den Specialist-Modus blieben sie auf ihrem
+          Hinweis: <strong>Biometrisch</strong> und <strong>Emotionserkennung</strong> sind Felder, die in Basis
+          und Standard nicht angezeigt werden. Ohne einen Wechsel in den Experte-Modus blieben sie auf ihrem
           Standardwert „Nein" stehen — das kann die Bewertung verändern, falls einer der beiden Fälle tatsächlich
           zutrifft.
         </p>
