@@ -4704,9 +4704,8 @@ textarea {
 .start-hero-media {
   position: relative;
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto 1rem;
-  height: 280px;
+  margin-bottom: 1rem;
+  height: 160px;
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(15, 23, 42, 0.18);
@@ -4714,7 +4713,7 @@ textarea {
 }
 
 .start-hero-media.start-hero-compact {
-  height: 160px;
+  height: 120px;
 }
 
 .start-hero-img {
@@ -4768,11 +4767,11 @@ textarea {
   }
 
   .start-hero-media {
-    height: 200px;
+    height: 100px;
   }
 
   .start-hero-media.start-hero-compact {
-    height: 140px;
+    height: 80px;
   }
 
   .start-inline-section {
